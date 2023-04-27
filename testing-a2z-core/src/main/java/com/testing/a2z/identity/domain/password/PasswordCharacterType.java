@@ -1,4 +1,4 @@
-package com.testing.a2z.core.domain.identity.user.password;
+package com.testing.a2z.identity.domain.password;
 
 import java.util.Objects;
 

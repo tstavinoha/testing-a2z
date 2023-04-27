@@ -1,19 +1,19 @@
-package com.testing.a2z.core.domain.identity.user.password;
+package com.testing.a2z.identity.domain.password;
 
-import static com.testing.a2z.core.domain.identity.user.password.PasswordCharacterType.DIGIT;
-import static com.testing.a2z.core.domain.identity.user.password.PasswordCharacterType.ILLEGAL;
-import static com.testing.a2z.core.domain.identity.user.password.PasswordCharacterType.LOWERCASE_LETTER;
-import static com.testing.a2z.core.domain.identity.user.password.PasswordCharacterType.SPECIAL;
-import static com.testing.a2z.core.domain.identity.user.password.PasswordCharacterType.UPPERCASE_LETTER;
+import static com.testing.a2z.identity.domain.password.PasswordCharacterType.DIGIT;
+import static com.testing.a2z.identity.domain.password.PasswordCharacterType.ILLEGAL;
+import static com.testing.a2z.identity.domain.password.PasswordCharacterType.LOWERCASE_LETTER;
+import static com.testing.a2z.identity.domain.password.PasswordCharacterType.SPECIAL;
+import static com.testing.a2z.identity.domain.password.PasswordCharacterType.UPPERCASE_LETTER;
 import static java.util.stream.Collectors.counting;
 import static java.util.stream.Collectors.groupingBy;
 
 import java.util.Map;
 import java.util.Objects;
 
-import com.testing.a2z.core.domain.identity.user.password.PasswordValidationError.ContainsIllegalCharacter;
-import com.testing.a2z.core.domain.identity.user.password.PasswordValidationError.InsufficientOccurrences;
-import com.testing.a2z.core.domain.identity.user.password.PasswordValidationError.TooShort;
+import com.testing.a2z.identity.domain.password.PasswordValidationError.ContainsIllegalCharacter;
+import com.testing.a2z.identity.domain.password.PasswordValidationError.InsufficientOccurrences;
+import com.testing.a2z.identity.domain.password.PasswordValidationError.TooShort;
 
 public class PasswordValidator {
 

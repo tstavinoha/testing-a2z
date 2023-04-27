@@ -1,4 +1,4 @@
-package com.testing.a2z.core.domain.identity.user;
+package com.testing.a2z.identity.domain;
 
 import static org.assertj.core.api.BDDAssertions.catchException;
 import static org.assertj.core.api.BDDAssertions.then;
