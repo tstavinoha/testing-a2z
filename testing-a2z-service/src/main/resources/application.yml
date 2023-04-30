@@ -1,0 +1,7 @@
+spring:
+  jpa:
+    generate-ddl: true
+  datasource:
+    url: jdbc:postgresql://<host>:<port>/FooBarDb
+    username: test
+    password: test
