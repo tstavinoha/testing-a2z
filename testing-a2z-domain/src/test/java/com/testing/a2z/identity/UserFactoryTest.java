@@ -11,19 +11,16 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.BDDMockito;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-@ExtendWith(MockitoExtension.class)
+// todo - redoslijed 4 - primjer mockanja 1, bez anotacija
+
 class UserFactoryTest {
 
-    @Mock
-    UserIdGenerator userIdGenerator;
-
-    @Mock
-    PasswordHasher passwordHasher;
-
-    @InjectMocks
-    UserFactory userFactory;
+    UserIdGenerator userIdGenerator = Mockito.mock(UserIdGenerator.class);
+    PasswordHasher passwordHasher = Mockito.mock(PasswordHasher.class);
+    UserFactory userFactory = new UserFactory(userIdGenerator, passwordHasher);
 
     @Test
     void shouldCreateUser() {

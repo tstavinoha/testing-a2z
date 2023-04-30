@@ -1,4 +1,4 @@
-package com.testing.a2z.identity.port.in;
+package com.testing.a2z.identity.port.in.verify;
 
 public interface VerifyPasswordQuery {
 
