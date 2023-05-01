@@ -1,4 +1,4 @@
-package com.testing.a2z.identity.jpa;
+package com.testing.a2z.identity.adapter.out.persistence;
 
 import static org.assertj.core.api.BDDAssertions.catchException;
 import static org.assertj.core.api.BDDAssertions.then;
@@ -6,8 +6,6 @@ import static org.assertj.core.api.BDDAssertions.then;
 import java.util.UUID;
 
 import com.testing.a2z.IntegrationTestBase;
-import com.testing.a2z.identity.adapter.jpa.UserEntity;
-import com.testing.a2z.identity.adapter.jpa.UserJpaRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;

@@ -1,10 +1,8 @@
-package com.testing.a2z.identity.adapter;
+package com.testing.a2z.identity.adapter.out.persistence;
 
 import java.util.Optional;
 
 import com.testing.a2z.identity.User;
-import com.testing.a2z.identity.adapter.jpa.UserEntity;
-import com.testing.a2z.identity.adapter.jpa.UserJpaRepository;
 import com.testing.a2z.identity.port.out.CreateUserPort;
 import com.testing.a2z.identity.port.out.FindUserPort;
 import lombok.AllArgsConstructor;

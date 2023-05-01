@@ -1,4 +1,4 @@
-package com.testing.a2z.identity.adapter.jpa;
+package com.testing.a2z.identity.adapter.out.persistence;
 
 import java.util.UUID;
 
