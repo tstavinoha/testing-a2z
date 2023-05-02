@@ -1,7 +1,5 @@
 package com.testing.a2z.identity.configuration;
 
-import java.util.UUID;
-
 import com.testing.a2z.identity.UserFactory;
 import com.testing.a2z.identity.UserIdGenerator;
 import com.testing.a2z.identity.UserService;
@@ -16,11 +14,6 @@ public class DomainConfiguration {
     @Bean
     public PasswordHasher passwordHasher() {
         return originalString -> Integer.toString(originalString.hashCode());
-    }
-
-    @Bean
-    public UserIdGenerator userIdGenerator() {
-        return UUID::randomUUID;
     }
 
     @Bean

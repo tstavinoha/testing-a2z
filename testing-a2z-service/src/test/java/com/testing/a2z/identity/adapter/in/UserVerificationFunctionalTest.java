@@ -1,10 +1,11 @@
-package com.testing.a2z.identity.adapter.in.web;
+package com.testing.a2z.identity.adapter.in;
 
 import static org.assertj.core.api.BDDAssertions.then;
 
 import com.testing.a2z.IntegrationTestBase;
 import com.testing.a2z.identity.adapter.UserHelper;
 import io.restassured.RestAssured;
+import io.restassured.response.Response;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,11 +24,7 @@ class UserVerificationFunctionalTest extends IntegrationTestBase {
         userHelper.givenUser(givenUsername, givenPassword);
 
         // when
-        var result = RestAssured.with()
-                                .queryParam("username", givenUsername)
-                                .queryParam("password", givenPassword)
-                                .get("/verify")
-                                .andReturn();
+        var result = whenVerificationAttempted(givenUsername, givenPassword);
 
         // then
         then(result.statusCode()).isEqualTo(HttpStatus.OK.value());
@@ -43,11 +40,7 @@ class UserVerificationFunctionalTest extends IntegrationTestBase {
         userHelper.givenUser(givenUsername, "givenOtherPassword");
 
         // when
-        var result = RestAssured.with()
-                                .queryParam("username", givenUsername)
-                                .queryParam("password", givenPassword)
-                                .get("/verify")
-                                .andReturn();
+        var result = whenVerificationAttempted(givenUsername, givenPassword);
 
         // then
         then(result.statusCode()).isEqualTo(HttpStatus.OK.value());
@@ -61,15 +54,19 @@ class UserVerificationFunctionalTest extends IntegrationTestBase {
         var givenPassword = "givenPassword";
 
         // when
-        var result = RestAssured.with()
-                                .queryParam("username", givenUsername)
-                                .queryParam("password", givenPassword)
-                                .get("/verify")
-                                .andReturn();
+        var result = whenVerificationAttempted(givenUsername, givenPassword);
 
         // then
         then(result.statusCode()).isEqualTo(HttpStatus.OK.value());
         then(result.body().asString()).isEqualTo(Boolean.FALSE.toString());
+    }
+
+    private Response whenVerificationAttempted(String username, String password) {
+        return RestAssured.with()
+                          .queryParam("username", username)
+                          .queryParam("password", password)
+                          .get("/verify")
+                          .andReturn();
     }
 
 }
