@@ -13,6 +13,7 @@
         <module>testing-a2z-domain</module>
         <module>testing-a2z-application</module>
         <module>testing-a2z-service</module>
+        <module>testing-a2z-stress-test</module>
     </modules>
 
     <properties>

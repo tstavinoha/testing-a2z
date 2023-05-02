@@ -1,7 +1,11 @@
 spring:
+  server.port: 8080
+
+  datasource:
+    url: jdbc:h2:mem:testingA2Z
+    username: sa
+    password: password
+
   jpa:
     generate-ddl: true
-  datasource:
-    url: jdbc:postgresql://<host>:<port>/FooBarDb
-    username: test
-    password: test
+    spring.jpa.database-platform: org.hibernate.dialect.H2Dialect
