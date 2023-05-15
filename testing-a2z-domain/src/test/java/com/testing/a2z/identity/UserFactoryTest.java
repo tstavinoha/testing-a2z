@@ -11,8 +11,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
 import org.mockito.Mockito;
 
-//  todo - redoslijed 4 - primjer mockanja 1, bez anotacija
-
 class UserFactoryTest {
 
     UserIdGenerator userIdGenerator = Mockito.mock(UserIdGenerator.class);

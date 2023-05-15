@@ -6,7 +6,6 @@ import static java.util.stream.Collectors.groupingBy;
 import java.util.Map;
 import java.util.Objects;
 
-// todo - redoslijed: 2
 public class PasswordValidator {
 
     private static final Integer MINIMUM_LENGTH = 10;

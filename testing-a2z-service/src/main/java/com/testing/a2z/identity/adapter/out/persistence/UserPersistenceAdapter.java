@@ -12,7 +12,6 @@ import org.springframework.stereotype.Component;
 
 @Component
 @AllArgsConstructor
-// todo - test - unit ili integration?
 public class UserPersistenceAdapter implements FindUserPort, CreateUserPort {
 
     private final UserJpaRepository userJpaRepository;

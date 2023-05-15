@@ -10,7 +10,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 
-// todo - redoslijed - 5 - pokazati i IntegrationTestBase, i da bi ovi testovi pucali bez ciscenja baze (izolacija)
 class UserJpaRepositoryTest extends IntegrationTestBase {
 
     @Autowired

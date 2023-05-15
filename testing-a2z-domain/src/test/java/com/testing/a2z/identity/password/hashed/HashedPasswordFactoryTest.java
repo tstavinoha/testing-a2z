@@ -17,7 +17,7 @@ class HashedPasswordFactoryTest {
     void shouldCreateHashedPassword() {
         // given
         var givenSalt = "givenSalt";
-        var givenPlainPassword = "1VeryCoolPassword!"; // todo - pitanje => zasto ovo mora biti validan password? staticke klase i testiranje
+        var givenPlainPassword = "1VeryCoolPassword!"; // NOTE: Must be a valid password due to static nature of PasswordValidator :(
         var givenHashedPassword = "givenHashedPassword";
 
         BDDMockito.given(saltGenerator.generate()).willReturn(givenSalt);

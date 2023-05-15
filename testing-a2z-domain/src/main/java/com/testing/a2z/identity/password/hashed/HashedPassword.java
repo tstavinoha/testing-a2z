@@ -5,7 +5,6 @@ import java.util.UUID;
 import com.testing.a2z.identity.password.Password;
 import lombok.Value;
 
-// todo - testovi, pokazati mock?
 @Value
 public class HashedPassword implements Password {
 

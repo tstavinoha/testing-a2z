@@ -16,17 +16,35 @@ It is not meant to be exposed to the outside world directly, but rather to be us
 ![](docs/00%20-%20C1%20-%20Architecture.svg)
 
 The general architecture of the project follows the design philosophy of Clean Architecture (or at least, tries to).
+The project is split up into four modules:
+- `testing-a2z-domain` - Domain layer
+- `testing-a2z-application` - Application layer
+- `testing-a2z-service` - Integration layer
+- `testing-a2z-stress-test` - Stress test
+
+Each module contains the source files in directory `src/main/java` and tests in directory `src/test/java`.
 
 ![](docs/00%20-%20C3%20-%20Architecture.svg)
 
 Testing technologies used in the project are:
-- JUnit 5 (Jupiter) - base testing framework that provides the support for running tests
-- Mockito - testing library for creation of shallow implementations and making up custom behavior of classes
-- AssertJ - Fluent assertion library, that makes our test more readable and concise
-- RestAssured - Helps with sending HTTP requests in functional tests
-- Gatling - Stress test tool
+- [JUnit 5 (Jupiter)](https://junit.org/junit5/) - base testing framework that provides the support for running tests
+- [Mockito](https://site.mockito.org/) - testing library for creation of shallow implementations and making up custom behavior of classes
+- [AssertJ](http://joel-costigliola.github.io/assertj/) - Fluent assertion library, that makes our test more readable and concise
+- [RestAssured](https://rest-assured.io/) - Helps with sending HTTP requests in functional tests
+- [Gatling](https://gatling.io/) - Stress test tool
 
-TODO - Spring, H2, 
+
+Domain and application layers are written in pure Java, while integration layer uses:
+- Spring Framework
+- Spring Boot
+- Spring Data JPA
+- Spring MVC
+- H2 Database (In-memory)
+
+Special magic behind the curtains of Spring includes:
+- Automatic database initialization (SQL DDL generation) on application startup
+  - Perfect for showcase projects, but do not use in production :)
+- Configuration file can be found in `src/main/resources/application.yml`
 
 ## Running the project tests
 
@@ -82,10 +100,9 @@ Tests in the class `PasswordValidatorTest` attempt to validate different passwor
 
 ### 4. HashedPasswordTest
 
-`HashedPasswordTest` points out one possibility ("test implementation") and one issue ("non-pure static methods").
+`HashedPasswordTest` points out one possibility ("test implementation") and one issue ("impure static methods").
 
 > A pure function is a function that, given the same input, will always return the same output and does not have any observable side effect.
-
 
 ![](docs/04%20-%20HashedPasswordTest.svg)
 
@@ -224,7 +241,8 @@ Stress test simulates high loads using a highly expressive DSL (domain-specific 
 
 The Gatling test called `StressTest` will first register a user, and the initiate a bombardment of our service with 750 requests per second for 30 seconds.
 
-## Limitations
+## Limitations and shortcuts
 - DB is in-memory, for simplicity of usage
+- Bean Validation on domain models and HTTP entities was skipped
 
 
