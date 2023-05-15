@@ -1,0 +1,15 @@
+@startuml
+!include <C4/C4_Context>
+
+Person(user, "User", "A person that can be identified and logged in")
+
+System_Ext(dependentService, "Dependent service", "Some user-facing service that needs access to identity tracking functionality")
+
+System(identityService, "Identity Service", "Stores information about users and their authentication options.\n\nProvides functionality for registering new users and verifying passwords of existing users.")
+
+Rel(user, dependentService, "Uses functionality of", "HTTP")
+Rel(dependentService, identityService, "Verifies users using", "HTTP")
+
+SHOW_LEGEND()
+
+@enduml

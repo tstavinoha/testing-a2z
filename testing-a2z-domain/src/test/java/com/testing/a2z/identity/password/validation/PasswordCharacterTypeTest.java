@@ -1,4 +1,4 @@
-package com.testing.a2z.identity.password;
+package com.testing.a2z.identity.password.validation;
 
 import static org.assertj.core.api.BDDAssertions.then;
 

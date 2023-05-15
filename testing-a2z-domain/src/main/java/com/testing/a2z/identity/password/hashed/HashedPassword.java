@@ -13,6 +13,12 @@ public class HashedPassword implements Password {
     String hash;
     Hasher hasher;
 
+    HashedPassword(String salt, String hash, Hasher hasher) {
+        this.salt = salt;
+        this.hash = hash;
+        this.hasher = hasher;
+    }
+
     @Override
     public boolean verify(String plainPassword) {
         return hasher.hash(salten(plainPassword, salt)).equals(hash);
