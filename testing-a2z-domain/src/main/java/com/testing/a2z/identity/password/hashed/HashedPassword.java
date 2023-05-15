@@ -1,23 +1,19 @@
-package com.testing.a2z.identity.password;
+package com.testing.a2z.identity.password.hashed;
 
 import java.util.UUID;
 
+import com.testing.a2z.identity.password.Password;
 import lombok.Value;
 
 // todo - testovi, pokazati mock?
 @Value
-public class HashedPassword {
+public class HashedPassword implements Password {
 
     String salt;
     String hash;
     Hasher hasher;
 
-    public HashedPassword(String salt, String hash, Hasher hasher) {
-        this.salt = salt;
-        this.hash = hash;
-        this.hasher = hasher;
-    }
-
+    @Override
     public boolean verify(String plainPassword) {
         return hasher.hash(salten(plainPassword, salt)).equals(hash);
     }

@@ -1,8 +1,7 @@
 package com.testing.a2z.identity.adapter.in.web;
 
-import static com.testing.a2z.identity.password.PasswordCharacterType.UPPERCASE_LETTER;
+import static com.testing.a2z.identity.password.validation.PasswordCharacterType.UPPERCASE_LETTER;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -14,7 +13,7 @@ import java.util.UUID;
 import java.util.stream.Stream;
 
 import com.testing.a2z.identity.User;
-import com.testing.a2z.identity.password.HashedPassword;
+import com.testing.a2z.identity.password.hashed.HashedPassword;
 import com.testing.a2z.identity.password.validation.InvalidPasswordException;
 import com.testing.a2z.identity.password.validation.PasswordValidationError;
 import com.testing.a2z.identity.password.validation.PasswordValidationError.ContainsIllegalCharacter;

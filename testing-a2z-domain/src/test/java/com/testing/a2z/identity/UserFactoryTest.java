@@ -5,8 +5,8 @@ import static org.mockito.ArgumentMatchers.anyString;
 
 import java.util.UUID;
 
-import com.testing.a2z.identity.password.HashedPassword;
-import com.testing.a2z.identity.password.HashedPasswordFactory;
+import com.testing.a2z.identity.password.hashed.HashedPassword;
+import com.testing.a2z.identity.password.hashed.HashedPasswordFactory;
 import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
 import org.mockito.Mockito;

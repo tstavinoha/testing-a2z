@@ -6,9 +6,9 @@ import com.testing.a2z.identity.UserFactory;
 import com.testing.a2z.identity.UserIdGenerator;
 import com.testing.a2z.identity.UserService;
 import com.testing.a2z.identity.adapter.out.persistence.UserPersistenceAdapter;
-import com.testing.a2z.identity.password.HashedPasswordFactory;
-import com.testing.a2z.identity.password.Hasher;
-import com.testing.a2z.identity.password.SaltGenerator;
+import com.testing.a2z.identity.password.hashed.HashedPasswordFactory;
+import com.testing.a2z.identity.password.hashed.Hasher;
+import com.testing.a2z.identity.password.hashed.SaltGenerator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

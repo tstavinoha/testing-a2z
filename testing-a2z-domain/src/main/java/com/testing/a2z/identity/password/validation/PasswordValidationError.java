@@ -1,7 +1,5 @@
 package com.testing.a2z.identity.password.validation;
 
-import com.testing.a2z.identity.password.PasswordCharacterType;
-
 public sealed interface PasswordValidationError {
 
     record TooShort() implements PasswordValidationError {

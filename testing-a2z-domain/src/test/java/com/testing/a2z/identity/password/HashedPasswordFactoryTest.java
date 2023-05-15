@@ -3,6 +3,10 @@ package com.testing.a2z.identity.password;
 import static org.assertj.core.api.BDDAssertions.then;
 import static org.mockito.ArgumentMatchers.anyString;
 
+import com.testing.a2z.identity.password.hashed.HashedPassword;
+import com.testing.a2z.identity.password.hashed.HashedPasswordFactory;
+import com.testing.a2z.identity.password.hashed.Hasher;
+import com.testing.a2z.identity.password.hashed.SaltGenerator;
 import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
 import org.mockito.Mockito;

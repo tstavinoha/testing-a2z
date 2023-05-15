@@ -7,7 +7,7 @@ import static org.mockito.BDDMockito.given;
 
 import java.util.UUID;
 
-import com.testing.a2z.identity.password.HashedPassword;
+import com.testing.a2z.identity.password.Password;
 import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
 import org.mockito.Mockito;
@@ -26,17 +26,17 @@ class UserTest {
         // given
         var id = UUID.fromString("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaa");
         var username = "username";
-        var hashedPassword = Mockito.mock(HashedPassword.class);
+        var password = Mockito.mock(Password.class);
 
         // when
-        var result = new User(id, username, hashedPassword);
+        var result = new User(id, username, password);
 
         // then
         then(result).isNotNull();
         then(result).isInstanceOf(User.class);
         then(result.id()).isEqualTo(id);
         then(result.username()).isEqualTo(username);
-        then(result.hashedPassword()).isEqualTo(hashedPassword);
+        then(result.password()).isEqualTo(password);
     }
 
     @Test
@@ -44,20 +44,21 @@ class UserTest {
         // given
         var id = UUID.fromString("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaa");
         var username = "username";
-        var password = "password";
-        var hashedPassword = Mockito.mock(HashedPassword.class);
-        // NOTE: In the first test the created user was the subject of the test, here it is a part of preparations
-        var user = new User(id, username, hashedPassword);
+        var plainPassword = "password";
+        var password = Mockito.mock(Password.class);
 
-        given(hashedPassword.verify(anyString())).willReturn(true);
+        // NOTE: In the first test the created user was the subject of the test, here it is a part of preparations
+        var user = new User(id, username, password);
+
+        given(password.verify(anyString())).willReturn(true);
 
         // when
-        var result = user.verifyPassword(password);
+        var result = user.verifyPassword(plainPassword);
 
         // then
         then(result).isTrue();
 
-        BDDMockito.then(hashedPassword).should().verify(password);
+        BDDMockito.then(password).should().verify(plainPassword);
     }
 
     @Test
@@ -65,14 +66,14 @@ class UserTest {
         // given
         var id = UUID.fromString("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaa");
         var username = "username";
-        var password = "password";
-        var hashedPassword = Mockito.mock(HashedPassword.class);
-        var user = new User(id, username, hashedPassword);
+        var plainPassword = "password";
+        var password = Mockito.mock(Password.class);
+        var user = new User(id, username, password);
 
-        given(hashedPassword.verify(anyString())).willThrow(new IllegalArgumentException());
+        given(password.verify(anyString())).willThrow(new IllegalArgumentException());
 
         // when
-        var result = catchException(() -> user.verifyPassword(password));
+        var result = catchException(() -> user.verifyPassword(plainPassword));
 
         // then
         then(result).isInstanceOf(IllegalArgumentException.class);

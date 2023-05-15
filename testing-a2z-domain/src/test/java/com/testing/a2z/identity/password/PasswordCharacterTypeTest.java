@@ -4,6 +4,7 @@ import static org.assertj.core.api.BDDAssertions.then;
 
 import java.util.stream.Stream;
 
+import com.testing.a2z.identity.password.validation.PasswordCharacterType;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;

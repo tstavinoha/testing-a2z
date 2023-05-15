@@ -3,7 +3,6 @@ package com.testing.a2z.identity.password.validation;
 import static org.assertj.core.api.BDDAssertions.catchException;
 import static org.assertj.core.api.BDDAssertions.then;
 
-import com.testing.a2z.identity.password.PasswordCharacterType;
 import com.testing.a2z.identity.password.validation.PasswordValidationError.ContainsIllegalCharacter;
 import com.testing.a2z.identity.password.validation.PasswordValidationError.InsufficientOccurrences;
 import com.testing.a2z.identity.password.validation.PasswordValidationError.TooShort;

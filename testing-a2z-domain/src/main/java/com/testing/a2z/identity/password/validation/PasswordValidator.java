@@ -6,8 +6,6 @@ import static java.util.stream.Collectors.groupingBy;
 import java.util.Map;
 import java.util.Objects;
 
-import com.testing.a2z.identity.password.PasswordCharacterType;
-
 // todo - redoslijed: 2
 public class PasswordValidator {
 

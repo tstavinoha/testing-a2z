@@ -2,6 +2,8 @@ package com.testing.a2z.identity.password;
 
 import static org.assertj.core.api.BDDAssertions.then;
 
+import com.testing.a2z.identity.password.hashed.HashedPassword;
+import com.testing.a2z.identity.password.hashed.Hasher;
 import org.junit.jupiter.api.Test;
 
 // todo - redoslijed - 2.

@@ -1,4 +1,4 @@
-package com.testing.a2z.identity.password;
+package com.testing.a2z.identity.password.hashed;
 
 import com.testing.a2z.identity.password.validation.PasswordValidator;
 import lombok.AllArgsConstructor;

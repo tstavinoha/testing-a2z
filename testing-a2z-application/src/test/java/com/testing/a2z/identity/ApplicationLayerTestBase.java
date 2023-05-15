@@ -1,7 +1,7 @@
 package com.testing.a2z.identity;
 
-import com.testing.a2z.identity.password.HashedPasswordFactory;
-import com.testing.a2z.identity.password.Hasher;
+import com.testing.a2z.identity.password.hashed.HashedPasswordFactory;
+import com.testing.a2z.identity.password.hashed.Hasher;
 import com.testing.a2z.identity.port.out.CreateUserPort;
 import com.testing.a2z.identity.port.out.FindUserPort;
 import org.junit.jupiter.api.extension.ExtendWith;

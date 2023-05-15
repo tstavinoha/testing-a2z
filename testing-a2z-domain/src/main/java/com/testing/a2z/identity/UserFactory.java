@@ -1,6 +1,6 @@
 package com.testing.a2z.identity;
 
-import com.testing.a2z.identity.password.HashedPasswordFactory;
+import com.testing.a2z.identity.password.hashed.HashedPasswordFactory;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
