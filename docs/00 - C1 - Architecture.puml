@@ -1,6 +1,8 @@
 @startuml
 !include <C4/C4_Context>
 
+left to right direction
+
 Person(user, "User", "A person that can be identified and logged in")
 
 System_Ext(dependentService, "Dependent service", "Some user-facing service that needs access to identity tracking functionality")

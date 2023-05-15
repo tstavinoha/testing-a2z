@@ -12,13 +12,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
 import org.mockito.Mockito;
 
-// TODO - test mora biti kao proza :D
-// TODO - redoslijed 1. Pokazati neki super jednostavni test tijekom prezentacije da nije preveliki sok.
-// ovdje su showcaseani
-// 1. - jednostavni inline mockito, assertanje resultata malo po malo
-// 2. - mockanje poziva i provjera da je mock ispravno pozvan
-// 3. - showcase za izazivanje i provjeru exceptiona
-
 class UserTest {
 
     @Test
@@ -59,25 +52,6 @@ class UserTest {
         then(result).isTrue();
 
         BDDMockito.then(password).should().verify(plainPassword);
-    }
-
-    @Test
-    void shouldShowcaseHandlingException() {
-        // given
-        var id = UUID.fromString("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaa");
-        var username = "username";
-        var plainPassword = "password";
-        var password = Mockito.mock(Password.class);
-        var user = new User(id, username, password);
-
-        given(password.verify(anyString())).willThrow(new IllegalArgumentException());
-
-        // when
-        var result = catchException(() -> user.verifyPassword(plainPassword));
-
-        // then
-        then(result).isInstanceOf(IllegalArgumentException.class);
-        then(result).isInstanceOf(RuntimeException.class);
     }
 
 }

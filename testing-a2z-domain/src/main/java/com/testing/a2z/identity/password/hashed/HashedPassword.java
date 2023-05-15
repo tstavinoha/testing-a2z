@@ -24,7 +24,9 @@ public class HashedPassword implements Password {
         return hasher.hash(salten(plainPassword, salt)).equals(hash);
     }
 
-    // NOTE: Factory method that uses statics - Doesn't play nice with tests
+    // NOTE: This static method factory is not pure - it will return different results when repeatedly invoked with same arguments.
+    // It is harder to test it and the assertions are less precise. Because we can't mock it, changes to the implementation in the future
+    // may cause the need to alter a larger amount of tests than neccessary.
     @Deprecated
     public static HashedPassword create(String plainPassword, Hasher hasher) {
         var salt = UUID.randomUUID().toString().substring(0, 4);

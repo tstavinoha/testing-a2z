@@ -6,10 +6,8 @@ import static org.assertj.core.api.BDDAssertions.then;
 import com.testing.a2z.identity.password.validation.PasswordValidationError.ContainsIllegalCharacter;
 import com.testing.a2z.identity.password.validation.PasswordValidationError.InsufficientOccurrences;
 import com.testing.a2z.identity.password.validation.PasswordValidationError.TooShort;
-import org.assertj.core.api.BDDAssertions;
 import org.junit.jupiter.api.Test;
 
-// todo - redoslijed: 2
 class PasswordValidatorTest {
 
     @Test
@@ -30,7 +28,7 @@ class PasswordValidatorTest {
         String givenPassword = null;
 
         // when
-        var actual = BDDAssertions.catchException(() -> PasswordValidator.validate(givenPassword));
+        var actual = catchException(() -> PasswordValidator.validate(givenPassword));
 
         // then
         then(actual).isEqualTo(new InvalidPasswordException(new TooShort()));
@@ -42,7 +40,7 @@ class PasswordValidatorTest {
         String givenPassword = "sH0R+";
 
         // when
-        var actual = BDDAssertions.catchException(() -> PasswordValidator.validate(givenPassword));
+        var actual = catchException(() -> PasswordValidator.validate(givenPassword));
 
         // then
         then(actual).isEqualTo(new InvalidPasswordException(new TooShort()));
@@ -54,7 +52,7 @@ class PasswordValidatorTest {
         String givenPassword = "i CONTAIN 3 spaces!";
 
         // when
-        var actual = BDDAssertions.catchException(() -> PasswordValidator.validate(givenPassword));
+        var actual = catchException(() -> PasswordValidator.validate(givenPassword));
 
         // then
         then(actual).isEqualTo(new InvalidPasswordException(new ContainsIllegalCharacter()));
@@ -66,7 +64,7 @@ class PasswordValidatorTest {
         String givenPassword = "NO_LOWERCASE_123";
 
         // when
-        var actual = BDDAssertions.catchException(() -> PasswordValidator.validate(givenPassword));
+        var actual = catchException(() -> PasswordValidator.validate(givenPassword));
 
         // then
         then(actual).isEqualTo(new InvalidPasswordException(new InsufficientOccurrences(PasswordCharacterType.LOWERCASE_LETTER)));
@@ -78,7 +76,7 @@ class PasswordValidatorTest {
         String givenPassword = "no_uppercase_123";
 
         // when
-        var actual = BDDAssertions.catchException(() -> PasswordValidator.validate(givenPassword));
+        var actual = catchException(() -> PasswordValidator.validate(givenPassword));
 
         // then
         var expectedException = new InvalidPasswordException(new InsufficientOccurrences(PasswordCharacterType.UPPERCASE_LETTER));
@@ -91,7 +89,7 @@ class PasswordValidatorTest {
         String givenPassword = "No_Digits_!!!";
 
         // when
-        var actual = BDDAssertions.catchException(() -> PasswordValidator.validate(givenPassword));
+        var actual = catchException(() -> PasswordValidator.validate(givenPassword));
 
         // then
         then(actual).isEqualTo(new InvalidPasswordException(new InsufficientOccurrences(PasswordCharacterType.DIGIT)));
@@ -103,7 +101,7 @@ class PasswordValidatorTest {
         String givenPassword = "NoSpecialCharacters1";
 
         // when
-        var actual = BDDAssertions.catchException(() -> PasswordValidator.validate(givenPassword));
+        var actual = catchException(() -> PasswordValidator.validate(givenPassword));
 
         // then
         var expectedException = new InvalidPasswordException(new InsufficientOccurrences(PasswordCharacterType.SPECIAL));

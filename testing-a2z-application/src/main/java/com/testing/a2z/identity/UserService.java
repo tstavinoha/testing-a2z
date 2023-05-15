@@ -9,7 +9,7 @@ import com.testing.a2z.identity.port.out.FindUserPort;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
-public class UserService implements RegisterUserUseCase, VerifyPasswordQuery { //todo - test. koliko klasa ima smisla?
+public class UserService implements RegisterUserUseCase, VerifyPasswordQuery { // todo - test. koliko klasa ima smisla?
 
     private final UserFactory userFactory;
     private final FindUserPort findUserPort;

@@ -2,7 +2,6 @@ package com.testing.a2z.identity.password.validation;
 
 import java.util.Objects;
 
-// todo - redoslijed: 3
 public enum PasswordCharacterType {
     UPPERCASE_LETTER,
     LOWERCASE_LETTER,

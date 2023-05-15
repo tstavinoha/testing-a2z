@@ -1,21 +1,26 @@
 @startuml
 !include <C4/C4_Component.puml>
 
+AddBoundaryTag(integrationBoundaryTag, $bgColor="#C7E9B0", $legendText="Integration layer")
+AddBoundaryTag(applicationBoundaryTag, $bgColor="#E3F2C1", $legendText="Application layer")
+AddBoundaryTag(domainBoundaryTag, $bgColor="#F6FFDE", $legendText="Domain layer")
+
 Container_Ext(spaContainer, "Single-Page Application", "React", "Provides our platform's functionality to users via web.")
 Container_Ext(mobileAppContainer, "Mobile App", "Ionic", "Provides our platform's functionality to users via a mobile app.")
 Container_Ext(frontendServerContainer, "Frontend Server", "Java Spring MVC", "Enables client apps to use our platform.")
-ContainerDb(database, "Database", "H2", "In-memory storage")
 
 Rel(spaContainer, frontendServerContainer, "Uses functionality of", "HTTP")
 Rel(mobileAppContainer, frontendServerContainer, "Uses functionality of", "HTTP")
 
 System_Boundary(identityBoundary, "Identity Service") {
 
-    System_Boundary(identityApplicationBoundary, "Identity Integration Layer") {
+    ContainerDb(database, "Database", "H2", "In-memory storage")
 
-        System_Boundary(identityApplicationBoundary, "Identity Application Layer") {
+    System_Boundary(identityApplicationBoundary, "Identity Integration Layer", $tags="integrationBoundaryTag") {
 
-            System_Boundary(identityDomainBoundary, "Identity Domain Layer") {
+        System_Boundary(identityApplicationBoundary, "Identity Application Layer", $tags="applicationBoundaryTag") {
+
+            System_Boundary(identityDomainBoundary, "Identity Domain Layer", $tags="domainBoundaryTag") {
                 together {
                     Component(user, "User", "Java", "Representation of a user registered on the platform.")
                     Component(password, "Password", "Java Interface", "Representation of a user password.")
@@ -30,9 +35,13 @@ System_Boundary(identityBoundary, "Identity Service") {
                 together {
                     Component(passwordValidator, "PasswordValidator", "Java", "Validates plain text passwords.")
                     Component(passwordCharacterType, "PasswordCharacterType", "Java", "Represents a type of character that may appear in a password.")
+                    Component(passwordValidationError, "PasswordValidationError", "Java", "Describes a reason why password validation failed.")
+                    Component(invalidPasswordException, "InvalidPasswordException", "Java", "An exception thrown when password is not valid, containing more information about why the validation failed.")
                 }
 
                 Rel(passwordValidator, passwordCharacterType, "Determines")
+                Rel(invalidPasswordException, passwordValidationError, "Contains")
+                Rel(passwordValidator, invalidPasswordException, "Throws")
 
                 System_Boundary(hashedPasswordBoundary, "Hashed Password") {
                     Component(hashedPassword, "Hashed Password", "Java", "Representation of a salted and hashed user password.")

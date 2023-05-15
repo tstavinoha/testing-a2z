@@ -1,0 +1,10 @@
+@startuml
+!include <C4/C4_Component.puml>
+
+left to right direction
+
+Component(user, "User", "Java", "Representation of a user registered on the platform.")
+Component(password, "Password", "Java Interface", "Representation of a user password.")
+Rel(user, password, "Authenticates using")
+
+@enduml
