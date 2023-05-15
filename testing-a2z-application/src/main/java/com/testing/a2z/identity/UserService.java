@@ -1,6 +1,5 @@
 package com.testing.a2z.identity;
 
-import com.testing.a2z.identity.password.PasswordHasher;
 import com.testing.a2z.identity.port.in.register.RegisterUserCommand;
 import com.testing.a2z.identity.port.in.register.RegisterUserUseCase;
 import com.testing.a2z.identity.port.in.register.UsernameTakenException;
@@ -13,7 +12,6 @@ import lombok.AllArgsConstructor;
 public class UserService implements RegisterUserUseCase, VerifyPasswordQuery { //todo - test. koliko klasa ima smisla?
 
     private final UserFactory userFactory;
-    private final PasswordHasher passwordHasher;
     private final FindUserPort findUserPort;
     private final CreateUserPort createUserPort;
 
@@ -35,8 +33,7 @@ public class UserService implements RegisterUserUseCase, VerifyPasswordQuery { /
     }
 
     private boolean verify(User user, String password) {
-        var hashedPassword = passwordHasher.hash(password);
-        return user.passwordHashEquals(hashedPassword);
+        return user.verifyPassword(password);
     }
 
 }

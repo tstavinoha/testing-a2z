@@ -19,7 +19,7 @@ class UserVerificationFunctionalTest extends IntegrationTestBase {
     void shouldVerifyUser() {
         // given
         var givenUsername = "givenUsername";
-        var givenPassword = "givenPassword";
+        var givenPassword = userHelper.givenValidPassword();
 
         userHelper.givenUser(givenUsername, givenPassword);
 
@@ -35,12 +35,13 @@ class UserVerificationFunctionalTest extends IntegrationTestBase {
     void shouldNotVerifyUser() {
         // given
         var givenUsername = "givenUsername";
-        var givenPassword = "givenPassword";
+        var givenPassword = userHelper.givenValidPassword();
+        var givenWrongPassword = "wrongPassword";
 
-        userHelper.givenUser(givenUsername, "givenOtherPassword");
+        userHelper.givenUser(givenUsername, givenPassword);
 
         // when
-        var result = whenVerificationAttempted(givenUsername, givenPassword);
+        var result = whenVerificationAttempted(givenUsername, givenWrongPassword);
 
         // then
         then(result.statusCode()).isEqualTo(HttpStatus.OK.value());

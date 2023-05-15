@@ -1,47 +1,44 @@
 package com.testing.a2z.identity;
 
 import static org.assertj.core.api.BDDAssertions.then;
-import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 
 import java.util.UUID;
 
-import com.testing.a2z.identity.password.PasswordHasher;
+import com.testing.a2z.identity.password.HashedPassword;
+import com.testing.a2z.identity.password.HashedPasswordFactory;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.BDDMockito;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 // todo - redoslijed 4 - primjer mockanja 1, bez anotacija
 
 class UserFactoryTest {
 
     UserIdGenerator userIdGenerator = Mockito.mock(UserIdGenerator.class);
-    PasswordHasher passwordHasher = Mockito.mock(PasswordHasher.class);
-    UserFactory userFactory = new UserFactory(userIdGenerator, passwordHasher);
+    HashedPasswordFactory hashedPasswordFactory = Mockito.mock(HashedPasswordFactory.class);
+    UserFactory userFactory = new UserFactory(userIdGenerator, hashedPasswordFactory);
 
     @Test
     void shouldCreateUser() {
         // given
         var givenId = UUID.fromString("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaa");
         var givenUsername = "givenUsername";
-        var givenPassword = "1VeryCoolPassword!"; // todo - pitanje => zasto ovo mora biti validan password? staticke klase i testiranje
-        var givenPasswordHash = "givenPasswordHash";
+        var givenPassword = "givenPassword";
+        var givenHashedPassword = Mockito.mock(HashedPassword.class);
 
         BDDMockito.given(userIdGenerator.generate()).willReturn(givenId);
-        BDDMockito.given(passwordHasher.hash(any())).willReturn(givenPasswordHash);
+        BDDMockito.given(hashedPasswordFactory.create(anyString())).willReturn(givenHashedPassword);
 
         // when
         var actual = userFactory.createUser(givenUsername, givenPassword);
 
         // then
-        var expectedUser = new User(givenId, givenUsername, givenPasswordHash);
+        var expectedUser = new User(givenId, givenUsername, givenHashedPassword);
         then(actual).isEqualTo(expectedUser);
 
         BDDMockito.then(userIdGenerator).should().generate();
-        BDDMockito.then(passwordHasher).should().hash(givenPassword);
+        BDDMockito.then(hashedPasswordFactory).should().create(givenPassword);
     }
 
 }

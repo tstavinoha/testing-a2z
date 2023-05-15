@@ -21,6 +21,9 @@ public class UserEntity {
     @Column(unique = true)
     private String username;
 
+    // NOTE: Inlined for simplicity, alternatively we could use @Embedded or @OneToOne
+    private String passwordSalt;
+
     private String passwordHash;
 
 }

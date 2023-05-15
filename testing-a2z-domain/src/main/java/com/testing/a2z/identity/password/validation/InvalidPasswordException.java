@@ -14,5 +14,4 @@ public class InvalidPasswordException extends RuntimeException {
         this.passwordValidationError = passwordValidationError;
     }
 
-
 }

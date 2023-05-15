@@ -14,6 +14,7 @@ import java.util.UUID;
 import java.util.stream.Stream;
 
 import com.testing.a2z.identity.User;
+import com.testing.a2z.identity.password.HashedPassword;
 import com.testing.a2z.identity.password.validation.InvalidPasswordException;
 import com.testing.a2z.identity.password.validation.PasswordValidationError;
 import com.testing.a2z.identity.password.validation.PasswordValidationError.ContainsIllegalCharacter;
@@ -29,6 +30,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.BDDMockito;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -156,7 +158,7 @@ public class UserControllerTest {
     }
 
     private User givenRegistrationSuccess(String givenUsername) {
-        var givenUser = new User(UUID.randomUUID(), givenUsername, "givenPasswordHash");
+        var givenUser = new User(UUID.randomUUID(), givenUsername, Mockito.mock(HashedPassword.class));
         BDDMockito.given(registerUserUseCase.register(any())).willReturn(givenUser);
         return givenUser;
     }

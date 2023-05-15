@@ -1,10 +1,8 @@
 package com.testing.a2z.identity.adapter;
 
-import java.util.UUID;
-
 import com.testing.a2z.identity.User;
+import com.testing.a2z.identity.UserFactory;
 import com.testing.a2z.identity.adapter.out.persistence.UserPersistenceAdapter;
-import com.testing.a2z.identity.password.PasswordHasher;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -13,12 +11,15 @@ import org.springframework.stereotype.Component;
 public class UserHelper {
 
     private final UserPersistenceAdapter userPersistenceAdapter;
-    private final PasswordHasher passwordHasher;
+    private final UserFactory userFactory;
 
     public User givenUser(String username, String password) {
-        var id = UUID.randomUUID();
-        var passwordHash = passwordHasher.hash(password);
-        return userPersistenceAdapter.create(new User(id, username, passwordHash));
+        var user = userFactory.createUser(username, password);
+        return userPersistenceAdapter.create(user);
+    }
+
+    public String givenValidPassword() {
+        return "Val1d_Password";
     }
 
 }

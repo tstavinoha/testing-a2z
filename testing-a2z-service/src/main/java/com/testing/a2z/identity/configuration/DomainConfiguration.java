@@ -1,10 +1,14 @@
 package com.testing.a2z.identity.configuration;
 
+import java.util.UUID;
+
 import com.testing.a2z.identity.UserFactory;
 import com.testing.a2z.identity.UserIdGenerator;
 import com.testing.a2z.identity.UserService;
 import com.testing.a2z.identity.adapter.out.persistence.UserPersistenceAdapter;
-import com.testing.a2z.identity.password.PasswordHasher;
+import com.testing.a2z.identity.password.HashedPasswordFactory;
+import com.testing.a2z.identity.password.Hasher;
+import com.testing.a2z.identity.password.SaltGenerator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -12,22 +16,26 @@ import org.springframework.context.annotation.Configuration;
 public class DomainConfiguration {
 
     @Bean
-    public PasswordHasher passwordHasher() {
+    public Hasher hasher() {
         return originalString -> Integer.toString(originalString.hashCode());
     }
 
     @Bean
+    public HashedPasswordFactory hashedPasswordFactory(Hasher hasher) {
+        SaltGenerator saltGenerator = () -> UUID.randomUUID().toString().substring(0, 4);
+        return new HashedPasswordFactory(saltGenerator, hasher);
+    }
+
+    @Bean
     public UserFactory userFactory(UserIdGenerator userIdGenerator,
-                                   PasswordHasher passwordHasher) {
-        return new UserFactory(userIdGenerator, passwordHasher);
+                                   HashedPasswordFactory hashedPasswordFactory) {
+        return new UserFactory(userIdGenerator, hashedPasswordFactory);
     }
 
     @Bean
     public UserService userService(UserFactory userFactory,
-                                   PasswordHasher passwordHasher,
                                    UserPersistenceAdapter userPersistenceAdapter) {
         return new UserService(userFactory,
-                               passwordHasher,
                                userPersistenceAdapter,
                                userPersistenceAdapter);
     }

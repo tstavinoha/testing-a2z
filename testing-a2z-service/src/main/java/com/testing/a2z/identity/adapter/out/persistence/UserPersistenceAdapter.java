@@ -3,6 +3,7 @@ package com.testing.a2z.identity.adapter.out.persistence;
 import java.util.Optional;
 
 import com.testing.a2z.identity.User;
+import com.testing.a2z.identity.password.HashedPasswordFactory;
 import com.testing.a2z.identity.port.out.CreateUserPort;
 import com.testing.a2z.identity.port.out.FindUserPort;
 import lombok.AllArgsConstructor;
@@ -14,10 +15,11 @@ import org.springframework.stereotype.Component;
 public class UserPersistenceAdapter implements FindUserPort, CreateUserPort {
 
     private final UserJpaRepository userJpaRepository;
+    private final HashedPasswordFactory hashedPasswordFactory;
 
     @Override
     public User create(User user) {
-        var userEntity = new UserEntity(user.id(), user.username(), user.passwordHash());
+        var userEntity = new UserEntity(user.id(), user.username(), user.hashedPassword().getSalt(), user.hashedPassword().getHash());
         var savedEntity = userJpaRepository.save(userEntity);
         return mapToDomainEntity(savedEntity);
     }
@@ -29,7 +31,10 @@ public class UserPersistenceAdapter implements FindUserPort, CreateUserPort {
     }
 
     private User mapToDomainEntity(UserEntity userEntity) {
-        return new User(userEntity.getId(), userEntity.getUsername(), userEntity.getPasswordHash());
+        return new User(userEntity.getId(),
+                        userEntity.getUsername(),
+                        hashedPasswordFactory.create(userEntity.getPasswordSalt(),
+                                                     userEntity.getPasswordHash()));
     }
 
 }

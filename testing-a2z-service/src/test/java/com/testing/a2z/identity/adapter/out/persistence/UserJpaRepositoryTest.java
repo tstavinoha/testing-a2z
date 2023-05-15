@@ -21,9 +21,10 @@ class UserJpaRepositoryTest extends IntegrationTestBase {
         // given
         var givenUserId = UUID.randomUUID();
         var givenUsername = "givenUsername";
+        var givenPasswordSalt = "givenPasswordSalt";
         var givenPasswordHash = "givenPasswordHash";
 
-        var givenUser = new UserEntity(givenUserId, givenUsername, givenPasswordHash);
+        var givenUser = new UserEntity(givenUserId, givenUsername, givenPasswordSalt, givenPasswordHash);
 
         // when
         userJpaRepository.save(givenUser);
@@ -38,8 +39,8 @@ class UserJpaRepositoryTest extends IntegrationTestBase {
         // given
         var givenUsername = "givenUsername";
 
-        var givenExistingUser = new UserEntity(UUID.randomUUID(), givenUsername, "passwordHash");
-        var givenNewOtherUser = new UserEntity(UUID.randomUUID(), givenUsername, "passwordHash");
+        var givenExistingUser = new UserEntity(UUID.randomUUID(), givenUsername, "salt", "passwordHash");
+        var givenNewOtherUser = new UserEntity(UUID.randomUUID(), givenUsername, "salt", "passwordHash");
 
         // when
         userJpaRepository.save(givenExistingUser);
@@ -54,9 +55,10 @@ class UserJpaRepositoryTest extends IntegrationTestBase {
         // given
         var givenUserId = UUID.randomUUID();
         var givenUsername = "givenUsername";
+        var givenPasswordSalt = "givenPasswordSalt";
         var givenPasswordHash = "givenPasswordHash";
 
-        var givenUser = new UserEntity(givenUserId, givenUsername, givenPasswordHash);
+        var givenUser = new UserEntity(givenUserId, givenUsername, givenPasswordSalt, givenPasswordHash);
         userJpaRepository.save(givenUser);
 
         // when

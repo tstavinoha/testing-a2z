@@ -2,13 +2,15 @@ package com.testing.a2z.identity;
 
 import java.util.UUID;
 
+import com.testing.a2z.identity.password.HashedPassword;
+
 // todo - redoslijed: 1
 public record User(UUID id,
                    String username,
-                   String passwordHash) {
+                   HashedPassword hashedPassword) { // todo - maybe Password interface
 
-    public boolean passwordHashEquals(String passwordHash) {
-        return this.passwordHash.equals(passwordHash);
+    public boolean verifyPassword(String plainPassword) {
+        return hashedPassword.verify(plainPassword);
     }
 
 }

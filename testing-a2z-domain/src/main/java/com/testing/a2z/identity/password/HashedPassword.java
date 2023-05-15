@@ -1,0 +1,40 @@
+package com.testing.a2z.identity.password;
+
+import java.util.UUID;
+
+import lombok.Value;
+
+// todo - testovi, pokazati mock?
+@Value
+public class HashedPassword {
+
+    String salt;
+    String hash;
+    Hasher hasher;
+
+    public HashedPassword(String salt, String hash, Hasher hasher) {
+        this.salt = salt;
+        this.hash = hash;
+        this.hasher = hasher;
+    }
+
+    public boolean verify(String plainPassword) {
+        return hasher.hash(salten(plainPassword, salt)).equals(hash);
+    }
+
+    // NOTE: Factory method that uses statics - Doesn't play nice with tests
+    @Deprecated
+    public static HashedPassword create(String plainPassword, Hasher hasher) {
+        var salt = UUID.randomUUID().toString().substring(0, 4);
+        var hash = hasher.hash(salten(plainPassword, salt));
+        return new HashedPassword(salt, hash, hasher);
+    }
+
+    // NOTE: This method is a pure function, so it does not cause any problems in tests.
+    // A pure function is a function that, given the same input, will always return the same output
+    // and does not have any observable side effect.
+    static String salten(String plainPassword, String salt) {
+        return plainPassword + salt;
+    }
+
+}

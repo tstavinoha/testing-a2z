@@ -1,6 +1,7 @@
 package com.testing.a2z.identity;
 
-import com.testing.a2z.identity.password.PasswordHasher;
+import com.testing.a2z.identity.password.HashedPasswordFactory;
+import com.testing.a2z.identity.password.Hasher;
 import com.testing.a2z.identity.port.out.CreateUserPort;
 import com.testing.a2z.identity.port.out.FindUserPort;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -8,6 +9,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+// todo - redoslijed 5 - mockito anotacije
 @ExtendWith(MockitoExtension.class)
 public class ApplicationLayerTestBase {
 
@@ -18,12 +20,15 @@ public class ApplicationLayerTestBase {
     protected UserFactory userFactory;
 
     @Mock
-    protected PasswordHasher passwordHasher;
+    protected Hasher hasher;
 
     @Mock
     protected FindUserPort findUserPort;
 
     @Mock
     protected CreateUserPort createUserPort;
+
+    @Mock
+    protected HashedPasswordFactory hashedPasswordFactory;
 
 }

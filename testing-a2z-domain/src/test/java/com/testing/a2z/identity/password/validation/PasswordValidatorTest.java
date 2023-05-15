@@ -10,6 +10,7 @@ import com.testing.a2z.identity.password.validation.PasswordValidationError.TooS
 import org.assertj.core.api.BDDAssertions;
 import org.junit.jupiter.api.Test;
 
+// todo - redoslijed: 2
 class PasswordValidatorTest {
 
     @Test

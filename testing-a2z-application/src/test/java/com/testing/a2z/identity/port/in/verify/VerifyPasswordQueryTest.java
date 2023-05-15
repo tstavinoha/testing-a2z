@@ -2,19 +2,23 @@ package com.testing.a2z.identity.port.in.verify;
 
 import static org.assertj.core.api.BDDAssertions.then;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
 
 import java.util.Optional;
-import java.util.UUID;
 
 import com.testing.a2z.identity.ApplicationLayerTestBase;
 import com.testing.a2z.identity.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
+import org.mockito.Mock;
 
 public class VerifyPasswordQueryTest extends ApplicationLayerTestBase {
 
     private VerifyPasswordQuery verifyPasswordQuery;
+
+    @Mock
+    User user;
 
     @BeforeEach
     void setUp() {
@@ -26,30 +30,26 @@ public class VerifyPasswordQueryTest extends ApplicationLayerTestBase {
         // given
         var givenUsername = "givenUsername";
         var givenPassword = "givenPassword";
-        var givenPasswordHash = "givenPasswordHash";
 
-        givenUser(givenUsername, givenPasswordHash);
-        givenPasswordHashing(givenPassword, givenPasswordHash);
+        givenUser(givenUsername, givenPassword);
 
         // when
         var result = verifyPasswordQuery.verify(givenUsername, givenPassword);
 
         // then
         then(result).isTrue();
-        BDDMockito.then(findUserPort).should().find(givenUsername);
-        BDDMockito.then(passwordHasher).should().hash(givenPassword);
+        thenUserHasBeenSearchedForByUsername(givenUsername);
+        thenPasswordWasVerified(givenPassword);
     }
 
     @Test
     void shouldNotVerifyWrongPassword() {
         // given
         var givenUsername = "givenUsername";
-        var givenUserPasswordHash = "givenUserPasswordHash";
+        var givenUserPassword = "givenUserPassword";
         var givenWrongPassword = "givenWrongPassword";
-        var givenWrongPasswordHash = "givenWrongPasswordHash";
 
-        givenUser(givenUsername, givenUserPasswordHash);
-        givenPasswordHashing(givenWrongPassword, givenWrongPasswordHash);
+        givenUser(givenUsername, givenUserPassword);
 
         // when
         var result = verifyPasswordQuery.verify(givenUsername, givenWrongPassword);
@@ -72,17 +72,22 @@ public class VerifyPasswordQueryTest extends ApplicationLayerTestBase {
         then(result).isFalse();
     }
 
-    private void givenUser(String username, String passwordHash) {
-        var user = new User(UUID.randomUUID(), username, passwordHash);
-        BDDMockito.given(findUserPort.find(any())).willReturn(Optional.of(user));
+    private User givenUser(String username, String password) {
+        given(findUserPort.find(username)).willReturn(Optional.of(user));
+        given(user.verifyPassword(any())).willAnswer(args -> password.equals(args.getArgument(0).toString()));
+        return user;
     }
 
     private void givenNoUserFound() {
-        BDDMockito.given(findUserPort.find(any())).willReturn(Optional.empty());
+        given(findUserPort.find(any())).willReturn(Optional.empty());
     }
 
-    private void givenPasswordHashing(String givenPassword, String givenPasswordHash) {
-        BDDMockito.given(passwordHasher.hash(givenPassword)).willReturn(givenPasswordHash);
+    private void thenPasswordWasVerified(String givenPassword) {
+        BDDMockito.then(user).should().verifyPassword(givenPassword);
+    }
+
+    private void thenUserHasBeenSearchedForByUsername(String givenUsername) {
+        BDDMockito.then(findUserPort).should().find(givenUsername);
     }
 
 }
