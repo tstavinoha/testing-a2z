@@ -5,13 +5,6 @@ AddBoundaryTag(integrationBoundaryTag, $bgColor="#C7E9B0", $legendText="Integrat
 AddBoundaryTag(applicationBoundaryTag, $bgColor="#E3F2C1", $legendText="Application layer")
 AddBoundaryTag(domainBoundaryTag, $bgColor="#F6FFDE", $legendText="Domain layer")
 
-Container_Ext(spaContainer, "Single-Page Application", "React", "Provides our platform's functionality to users via web.")
-Container_Ext(mobileAppContainer, "Mobile App", "Ionic", "Provides our platform's functionality to users via a mobile app.")
-Container_Ext(frontendServerContainer, "Frontend Server", "Java Spring MVC", "Enables client apps to use our platform.")
-
-Rel(spaContainer, frontendServerContainer, "Uses functionality of", "HTTP")
-Rel(mobileAppContainer, frontendServerContainer, "Uses functionality of", "HTTP")
-
 System_Boundary(identityBoundary, "Identity Service") {
 
     ContainerDb(database, "Database", "H2", "In-memory storage")
@@ -94,12 +87,11 @@ System_Boundary(identityBoundary, "Identity Service") {
         Rel(userPersistenceAdapter, createUserPort, "Implements")
         Rel(userPersistenceAdapter, findUserPort, "Implements")
 
-
     }
 }
 
-Rel(frontendServerContainer, userController, "Verifies passwords", "HTTP")
-Rel(frontendServerContainer, userController, "Registers users", "HTTP")
+Component(testEntryPoint, "Test Entry Point")
+Rel(testEntryPoint, userController, "Registers users", "HTTP")
 
 SHOW_LEGEND()
 

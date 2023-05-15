@@ -1,0 +1,18 @@
+@startuml
+!include <C4/C4_Component.puml>
+
+left to right direction
+
+System_Boundary(test, "Test") {
+    Component(testController, "Controller", "Spring MVC", "Application HTTP entry point")
+    Component(testService, "Service", "Java", "Application service that does some logic")
+    Component(testAdapter, "Adapter", "Java", "Adapter that hides the HTTP details from the service")
+
+    Container(testServer, "MockServer", "HTTP", "MockServer or WireMock")
+
+    Rel(testController, testService, "Calls")
+    Rel(testService, testAdapter, "Calls")
+    Rel(testAdapter, testServer, "Calls")
+}
+
+@enduml

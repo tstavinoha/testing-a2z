@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.UUID;
 
 import com.testing.a2z.identity.UserIdGenerator;
+import com.testing.a2z.identity.adapter.UserHelper;
 import io.restassured.RestAssured;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,6 +22,9 @@ public class IntegrationTestBase {
 
     @Autowired
     private List<CrudRepository<?, ?>> allRepositories;
+
+    @Autowired
+    protected UserHelper userHelper;
 
     @SpyBean
     protected UserIdGenerator userIdGenerator;

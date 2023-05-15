@@ -23,6 +23,10 @@ Testing technologies used in the project are:
 - JUnit 5 (Jupiter) - base testing framework that provides the support for running tests
 - Mockito - testing library for creation of shallow implementations and making up custom behavior of classes
 - AssertJ - Fluent assertion library, that makes our test more readable and concise
+- RestAssured - Helps with sending HTTP requests in functional tests
+- Gatling - Stress test tool
+
+TODO - Spring, H2, 
 
 ## Running the project tests
 
@@ -125,17 +129,100 @@ The hook in this test class is used just to reassign the variable to a more appr
 Also, this test is written more in BDD style compared to previous ones, where BDD conventions were intentionally used more loosely.
 
 ### 7. UserControllerTest
-TODO
-Spring MockMvc, non BDD
-Unit tests for HTTP
 
-### 8. UserRegistrationFunctionalTest and UserVerificationFunctionalTest
-TODO
-showcase @SpyBean, end to end test example which will take the most into testing context
+Moving on to the integration layer, first test to take a look at is `UserControllerTest`, which sits somewhere between a unit and an integration test.
+Spring Framework provides a testing library called `MockMvc`, which can be used to unit test Spring MVC `@Controllers`. We test only the HTTP part,
+mocking all the dependencies that the controller uses.
 
-### 9. Stress test
-TODO
+![](docs/07%20-%20UserControllerTest.svg)
+
+The setup is similar to using Mockito annotations, however Spring provides its own annotations which enable us to set up the `test context` in an even
+simpler manner. The following annotations are used
+- `@ExtendWith(SpringExtension.class)`
+    - Adds Spring Test extension to JUnit
+- `@WebMvcTest(UserController.class)`
+    - Defines the scope of the test. Spring will load only the UserController when preparing the test context
+- `@MockBean`
+    - This annotation is similar to Mockito's `@Mock`, but will additionally enable the mock bean for autowiring and automatically reset it after each test
+- `@Autowired`
+    - Autowires the controller that is the subject of the test into the test class
+
+MockMVC has its own DSL (domain-specific language), which is not in the BDD style, so the tests themselves are not written in the BDD style as well.
+
+### 8. UserJpaRepositoryTest
+
+`UserJpaRepositoryTest` is the first integration test in this project, meaning that it uses a real database.
+Class `IntegrationTestBase` defines the shared test context for all integration and functional tests.
+
+![](docs/08%20-%20JpaRepositoryTest.svg)
+
+The database setup in this showcase project is as simple as possible. Alongside the test context, a small in-memory database will be started.
+This is all done implicitly by Spring Data. In case we wanted to use a "real" database, we would use dockerized database via so-called Test Containers.
+Infobip has a [dedicated project](https://github.com/infobip/infobip-testcontainers-spring-boot-starter) intended to help developers use popular external 
+systems in testing scenarios.
+
+There is one catch when running integration tests. In previous tests, which were unit tests, the testing configuration/context was created from scratch on every test.
+However, in integration tests we need to start the whole Spring context, which is a pricey operation, so we want to start the context only once per all the tests run in a batch.
+This comes out of the box when using `@SpringBootTest` annotation on our base test class, but the hidden caveat is that after a test is done, everything it wrote into
+the database will remain saved. Therefore, we need to clean up the database after each test. We can use a handy snippet for this action in `IntegrationTestBase`:
+
+```
+@Autowired // NOTE: inject all repositories from the context
+private List<CrudRepository<?, ?>> allRepositories;
+
+@AfterEach
+public void cleanUp() {
+    allRepositories.forEach(CrudRepository::deleteAll);
+}
+```
+
+The database cleanup shown above is important in order for our tests to be isolated.
+
+### 9. UserRegistrationFunctionalTest
+
+Functional tests (a.k.a. End-To-End, E2E) test the system from "outside", by simulating interactions that the system would encounter in production. 
+All the classes in the diagram below will work in unison to handle request received via HTTP.
+The functional test will, like every unit test, verify that the expected response was received - the difference is in 
+the number of engaged software components that are tested at the time.
+
+![](docs/09%20-%20UserRegistrationFunctionalTest.svg)
+
+We can use mocks in functional tests as well, but we should strive to use as few as possible.
+One other alternative is the `@SpyBean`, which is half-way between a mock and a Spring bean, allowing us to either mock
+the invocation, or let the actual Spring Bean perform the operation. In the test `shouldRegisterUser`, spy mocking is used to mock a predictable userId that can be easily used in assertions.
+
+#### Entry end of the E2E
+All the `when` parts of functional tests are actually HTTP invocations. The tests make no assumptions on HTTP parsing by the server
+and structure these HTTP requests as an external service would. The library used to help with preparation of these requests is RestAssured. Parts of configuration relevant for
+functional tests are:
+- `@SpringBootTest(webEnvironment = RANDOM_PORT)`
+  - The latter part specifies that the HTTP server our application uses will be started on a random port. This technique is used to prevent port clashes on build machines.
+- ```
+    @BeforeEach
+    public void setUp() {
+        RestAssured.port = localServerPort;
+    }
+  ```
+  - RestAssured library is normally used statically. We can set the default target port to the random port selected by the test runner.
+
+#### Exit end of the E2E
+One of the main objectives of E2E test is to make sure that any _exits_ of the application were called correctly - the database, message brokers, external HTTP endpoints that our service uses, etc.
+Our service may depend on external services and we want to make sure that they are properly mocked (if needed) and that the invocations are asserted.
+
+One common use case (not depicted in this project), would be verifying that our service has called an external HTTP endpoint. For the test to complete normally,
+this HTTP endpoint must return a result. We could use classic mocking here, but such a test would not be a true End-2-End test because it would not test the critial logic
+of preparing the HTTP request and parsing the HTTP response, which can both go wrong if not tested.
+
+One common library for mocking HTTP servers is MockServer. With Spring, we would most likely use different profiles to configure production and test context differently:
+- Production profile would set the external system base URL to the actual service URL, eg. `http://facebook.com`
+![](docs/09%20-%20ProductionServer.svg)
+- Test profile would start the HTTP service mocking library locally and set the base URL to `http://localhost:<port>`
+![](docs/09%20-%20MockServer.svg)
+
+### 10. Stress test
 Stress test simulates high loads using a highly expressive DSL (domain-specific language).
+
+The Gatling test called `StressTest` will first register a user, and the initiate a bombardment of our service with 750 requests per second for 30 seconds.
 
 ## Limitations
 - DB is in-memory, for simplicity of usage

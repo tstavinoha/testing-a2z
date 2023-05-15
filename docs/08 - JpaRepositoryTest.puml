@@ -1,0 +1,14 @@
+@startuml
+!include <C4/C4_Component.puml>
+
+left to right direction
+
+ContainerDb(database, "Database", "H2", "In-memory storage")
+
+Component(userEntity, "UserEntity", "JPA", "Model for storing the user in a database")
+Component(userJpaRepository, "UserJpaRepository", "Spring Data JPA", "Repository for persistence of UserEntities")
+
+Rel(userJpaRepository, userEntity, "Stores and loads")
+Rel(userJpaRepository, database, "Persists using")
+
+@enduml

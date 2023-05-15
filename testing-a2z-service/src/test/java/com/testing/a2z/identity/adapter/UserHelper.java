@@ -13,6 +13,10 @@ public class UserHelper {
     private final UserPersistenceAdapter userPersistenceAdapter;
     private final UserFactory userFactory;
 
+    public User givenUser(String username) {
+        return givenUser(username, givenValidPassword());
+    }
+
     public User givenUser(String username, String password) {
         var user = userFactory.createUser(username, password);
         return userPersistenceAdapter.create(user);

@@ -1,0 +1,20 @@
+@startuml
+!include <C4/C4_Component.puml>
+
+left to right direction
+
+System_Boundary(production, "Production") {
+    Component(controller, "Controller", "Spring MVC", "Application HTTP entry point")
+    Component(service, "Service", "Java", "Application service that does some logic")
+    Component(adapter, "Adapter", "Java", "Adapter that hides the HTTP details from the service")
+
+
+    Rel(controller, service, "Calls")
+    Rel(service, adapter, "Calls")
+}
+
+Container_Ext(server, "External Server", "HTTP", "External server, e.g. Facebook Graph API")
+Rel(adapter, server, "Calls")
+
+
+@enduml

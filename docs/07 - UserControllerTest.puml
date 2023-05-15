@@ -1,0 +1,13 @@
+@startuml
+!include <C4/C4_Component.puml>
+
+left to right direction
+
+Component(userController, "UserController", "Spring MVC", "Exposes use cases and queries via HTTP.")
+Component(verifyPasswordQuery, "VerifyPasswordQuery", "Mock", "Inbound port for verification of user password.")
+Component(registerUserUseCase, "RegisterUserUseCase", "Mock", "Inbound port for user registration.")
+
+Rel(userController, registerUserUseCase, "Registers users")
+Rel(userController, verifyPasswordQuery, "Verifies passwords")
+
+@enduml
