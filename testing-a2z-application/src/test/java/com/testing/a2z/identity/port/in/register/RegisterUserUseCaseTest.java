@@ -13,11 +13,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
 
-// ovo je korak prema intergracijskom testu, showcase kako cemo tu pusiti da se izvti logika 2 klase
-// priprema za kompliciraniji setup od springa, showcase za metode before each
-// malo vise bdd
-// trebali bi testirati implementacije, ali za showcase je splitano sad
-
 class RegisterUserUseCaseTest extends ApplicationLayerTestBase {
 
     private RegisterUserUseCase registerUserUseCase;
@@ -32,17 +27,17 @@ class RegisterUserUseCaseTest extends ApplicationLayerTestBase {
         // given
         var givenUsername = "givenUsername";
         var givenPassword = "givenPassword";
-        var registerUserCommand = new RegisterUserCommand(givenUsername, givenPassword);
+        var givenRegisterUserCommand = new RegisterUserCommand(givenUsername, givenPassword);
 
         givenUsernameNotTaken();
         var givenUser = givenSuccessfulUserCreation();
 
         // when
-        var actual = registerUserUseCase.register(registerUserCommand);
+        var actual = registerUserUseCase.register(givenRegisterUserCommand);
 
         // then
         then(actual).isEqualTo(givenUser);
-        BDDMockito.then(findUserPort).should().find(registerUserCommand.username());
+        BDDMockito.then(findUserPort).should().find(givenRegisterUserCommand.username());
         BDDMockito.then(userFactory).should().createUser(givenUsername, givenPassword);
         BDDMockito.then(createUserPort).should().create(any(User.class));
     }

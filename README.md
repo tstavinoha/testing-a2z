@@ -19,6 +19,11 @@ The general architecture of the project follows the design philosophy of Clean A
 
 ![](docs/00%20-%20C3%20-%20Architecture.svg)
 
+Testing technologies used in the project are:
+- JUnit 5 (Jupiter) - base testing framework that provides the support for running tests
+- Mockito - testing library for creation of shallow implementations and making up custom behavior of classes
+- AssertJ - Fluent assertion library, that makes our test more readable and concise
+
 ## Running the project tests
 
 ### Pre-requisites
@@ -91,12 +96,33 @@ Tests in the class `PasswordValidatorTest` attempt to validate different passwor
 
 ### 5. HashedPasswordFactoryTest
 
-TODO
-showcases how to inject mocks into services, manually
+`HashedPasswordFactoryTest` presents how to prepare the subject of the test for testing.
+
+![](docs/05%20-%20HashedPasswordFactoryTest.svg)
+
+Up until this test, we only created mocks and mocked behavior within the methods annotated with `@Test`.
+However, usually we set up the target class and the mocks it depends on prior to the test. This test class shows how it can be done
+manually.
+
+Once again, we have a problem with password validator being static. While it does not prevent us from testing, it requires the plain-text password to be 
+valid. What is considered a valid password may change in the future, and this test will need to be updated over time, even though it does not test the actual 
+validation. From the perspective of the `HashedPasswordFactory`, the only important thing is whether the `PasswordValidator` deemed the password valid or not.
+It would be better if we could just mock the desired behavior of the validator.
 
 ### 6. ApplicationLayerTestBase and RegisterUserUseCaseTest
-TODO
-showcase Mockito annotations and sharing test configuration via inheritance
+
+These two tests show how we can configure tests in a manner that can be reused. Configuration can be shared through inheritance - `RegisterUserUseCaseTest` extends `ApplicationLayerTestBase` and
+implicitly inherits all the configuration.
+
+As an improvement to the previous test where we set up the testing subject manually, we can use Mockito with JUnit Extension API:
+- `@ExtendWith(MockitoExtension.class)`
+- `@Mock`
+- `@InjectMocks`
+
+JUnit also provides test lifecycle hooks, such as `@BeforeEach` or `@AfterAll`. 
+The hook in this test class is used just to reassign the variable to a more appropriate name, that is not something that would normally be done.
+
+Also, this test is written more in BDD style compared to previous ones, where BDD conventions were intentionally used more loosely.
 
 ### 7. UserControllerTest
 TODO

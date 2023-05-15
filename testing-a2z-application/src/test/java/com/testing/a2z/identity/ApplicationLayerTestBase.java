@@ -9,7 +9,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-// todo - redoslijed 5 - mockito anotacije
 @ExtendWith(MockitoExtension.class)
 public class ApplicationLayerTestBase {
 

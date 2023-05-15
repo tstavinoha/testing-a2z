@@ -53,7 +53,7 @@ System_Boundary(identityBoundary, "Identity Service") {
                     Rel(hashedPassword, hasher, "Checks hashes using")
                     Rel(hashedPasswordFactory, hasher, "Hashes using")
                     Rel(hashedPasswordFactory, saltGenerator, "Generates salt using")
-                    Rel(hashedPasswordFactory, hashedPassword, "Generates salt using")
+                    Rel(hashedPasswordFactory, hashedPassword, "Creates")
                     Rel(hashedPasswordFactory, passwordValidator, "Validates using")
                     Rel(userFactory, hashedPasswordFactory, "Generates passwords using")
                 }
