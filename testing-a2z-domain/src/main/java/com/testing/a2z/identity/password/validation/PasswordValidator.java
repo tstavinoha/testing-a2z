@@ -6,6 +6,8 @@ import static java.util.stream.Collectors.groupingBy;
 import java.util.Map;
 import java.util.Objects;
 
+import com.testing.a2z.identity.password.validation.PasswordValidationError.InsufficientOccurrences;
+
 public class PasswordValidator {
 
     private static final Integer MINIMUM_LENGTH = 10;
@@ -35,12 +37,12 @@ public class PasswordValidator {
         MINIMUM_OCCURRENCES.keySet()
                            .stream()
                            .filter(requiredType -> {
-                              var minOccurrence = MINIMUM_OCCURRENCES.get(requiredType);
-                              var actualOccurrence = characterTypeCounts.getOrDefault(requiredType, 0L).intValue();
-                              return actualOccurrence < minOccurrence;
-                          })
+                               var minOccurrence = MINIMUM_OCCURRENCES.get(requiredType);
+                               var actualOccurrence = characterTypeCounts.getOrDefault(requiredType, 0L).intValue();
+                               return actualOccurrence < minOccurrence;
+                           })
                            .findAny()
-                           .ifPresent(insufficientPasswordCharacterType -> failValidation(new PasswordValidationError.InsufficientOccurrences(insufficientPasswordCharacterType)));
+                           .ifPresent(insufficientPasswordCharacterType -> failValidation(new InsufficientOccurrences(insufficientPasswordCharacterType)));
     }
 
     private static void failValidation(PasswordValidationError passwordValidationError) {

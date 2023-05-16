@@ -21,41 +21,43 @@ System_Boundary(identityBoundary, "Identity Service") {
         System_Boundary(identityApplicationBoundary, "Identity Application Layer", $tags="applicationBoundaryTag") {
 
             System_Boundary(identityDomainBoundary, "Identity Domain Layer", $tags="domainBoundaryTag") {
-                together {
+                System_Boundary(userBoundary, "User") {
                     Component(user, "User", "Java", "Representation of a user registered on the platform.")
+                    Component(userIdGenerator, "UserIdGenerator", "Java Interface", "Interface for generating user ids.")
+                    Component(userFactory, "UserFactory", "Java", "Factory for creating new users.")
+
+                    Rel(userFactory, userIdGenerator, "Generates IDs using")
+                    Rel(userFactory, user, "Creates")
+                }
+
+                System_Boundary(passwordBoundary, "Password") {
                     Component(password, "Password", "Java Interface", "Representation of a user password.")
-                }
 
-                Component(userIdGenerator, "UserIdGenerator", "Java Interface", "Interface for generating user ids.")
-                Component(userFactory, "UserFactory", "Java", "Factory for creating new users.")
+                    System_Boundary(passwordValidationBoundary, "Password Validation") {
+                        Component(passwordValidator, "PasswordValidator", "Java", "Validates plain text passwords.")
+                        Component(passwordCharacterType, "PasswordCharacterType", "Java", "Represents a type of character that may appear in a password.")
+                        Component(passwordValidationError, "PasswordValidationError", "Java", "Describes a reason why password validation failed.")
+                        Component(invalidPasswordException, "InvalidPasswordException", "Java", "An exception thrown when password is not valid, containing more information about why the validation failed.")
 
-                Rel(userFactory, userIdGenerator, "Generates IDs using")
-                Rel(userFactory, user, "Creates")
+                        Rel(passwordValidator, passwordCharacterType, "Determines")
+                        Rel(invalidPasswordException, passwordValidationError, "Contains")
+                        Rel(passwordValidator, invalidPasswordException, "Throws")
+                    }
 
-                together {
-                    Component(passwordValidator, "PasswordValidator", "Java", "Validates plain text passwords.")
-                    Component(passwordCharacterType, "PasswordCharacterType", "Java", "Represents a type of character that may appear in a password.")
-                    Component(passwordValidationError, "PasswordValidationError", "Java", "Describes a reason why password validation failed.")
-                    Component(invalidPasswordException, "InvalidPasswordException", "Java", "An exception thrown when password is not valid, containing more information about why the validation failed.")
-                }
+                    System_Boundary(hashedPasswordBoundary, "Hashed Password") {
+                        Component(hashedPassword, "Hashed Password", "Java", "Representation of a salted and hashed user password.")
+                        Component(hashedPasswordFactory, "HashedPasswordFactory", "Java", "Factory for creating new hashed passwords.")
+                        Component(saltGenerator, "SaltGenerator", "Java Interface", "Interface for generating salt.")
+                        Component(hasher, "Hasher", "Java Interface", "Interface for hashing text.")
 
-                Rel(passwordValidator, passwordCharacterType, "Determines")
-                Rel(invalidPasswordException, passwordValidationError, "Contains")
-                Rel(passwordValidator, invalidPasswordException, "Throws")
-
-                System_Boundary(hashedPasswordBoundary, "Hashed Password") {
-                    Component(hashedPassword, "Hashed Password", "Java", "Representation of a salted and hashed user password.")
-                    Component(hashedPasswordFactory, "HashedPasswordFactory", "Java", "Factory for creating new hashed passwords.")
-                    Component(saltGenerator, "SaltGenerator", "Java Interface", "Interface for generating salt.")
-                    Component(hasher, "Hasher", "Java Interface", "Interface for hashing text.")
-
-                    Rel(hashedPassword, password, "Implements")
-                    Rel(hashedPassword, hasher, "Checks hashes using")
-                    Rel(hashedPasswordFactory, hasher, "Hashes using")
-                    Rel(hashedPasswordFactory, saltGenerator, "Generates salt using")
-                    Rel(hashedPasswordFactory, hashedPassword, "Creates")
-                    Rel(hashedPasswordFactory, passwordValidator, "Validates using")
-                    Rel(userFactory, hashedPasswordFactory, "Generates passwords using")
+                        Rel(hashedPassword, password, "Implements")
+                        Rel(hashedPassword, hasher, "Checks hashes using")
+                        Rel(hashedPasswordFactory, hasher, "Hashes using")
+                        Rel(hashedPasswordFactory, saltGenerator, "Generates salt using")
+                        Rel(hashedPasswordFactory, hashedPassword, "Creates")
+                        Rel(hashedPasswordFactory, passwordValidator, "Validates using")
+                        Rel(userFactory, hashedPasswordFactory, "Generates passwords using")
+                    }
                 }
 
                 Rel(user, password, "Authenticates using")

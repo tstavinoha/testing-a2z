@@ -1,0 +1,11 @@
+@startuml
+!include <C4/C4_Component.puml>
+
+left to right direction
+
+Component(applicationLayerTestBase , "ApplicationLayerTestBase", "Java", "Configures the testing environment.")
+Component(registerUserUseCaseTest, "RegisterUserUseCaseTest", "Java", "Reuses the configuration through inheritance.")
+
+Rel_U(registerUserUseCaseTest, applicationLayerTestBase, "Extends")
+
+@enduml

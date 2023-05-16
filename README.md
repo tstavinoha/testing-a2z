@@ -123,17 +123,21 @@ Tests in the class `PasswordValidatorTest` attempt to validate different passwor
 
 Up until this test, we only created mocks and mocked behavior within the methods annotated with `@Test`.
 However, usually we set up the target class and the mocks it depends on prior to the test. This test class shows how it can be done
-manually.
+manually. 
+
+Important thing to note is that in this kind of setup, test class fields (e.g. `saltGenerator`) are re-instantiated on every test execution. 
 
 Once again, we have a problem with password validator being static. While it does not prevent us from testing, it requires the plain-text password to be 
 valid. What is considered a valid password may change in the future, and this test will need to be updated over time, even though it does not test the actual 
 validation. From the perspective of the `HashedPasswordFactory`, the only important thing is whether the `PasswordValidator` deemed the password valid or not.
-It would be better if we could just mock the desired behavior of the validator.
+It would be better if we could just mock the desired behavior of the validator. Also, we can't verify that the static member was actually called.
 
 ### 6. ApplicationLayerTestBase and RegisterUserUseCaseTest
 
 These two tests show how we can configure tests in a manner that can be reused. Configuration can be shared through inheritance - `RegisterUserUseCaseTest` extends `ApplicationLayerTestBase` and
 implicitly inherits all the configuration.
+
+![](docs/06-ConfigurationInheritance.svg)
 
 As an improvement to the previous test where we set up the testing subject manually, we can use Mockito with JUnit Extension API:
 - `@ExtendWith(MockitoExtension.class)`

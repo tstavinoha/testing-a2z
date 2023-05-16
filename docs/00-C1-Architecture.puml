@@ -12,6 +12,4 @@ System(identityService, "Identity Service", "Stores information about users and 
 Rel(user, dependentService, "Uses functionality of", "HTTP")
 Rel(dependentService, identityService, "Verifies users using", "HTTP")
 
-SHOW_LEGEND()
-
 @enduml

@@ -1,8 +1,11 @@
 package com.testing.a2z.identity.password.hashed;
 
+import static org.assertj.core.api.BDDAssertions.catchException;
 import static org.assertj.core.api.BDDAssertions.then;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.BDDMockito.given;
 
+import com.testing.a2z.identity.password.validation.InvalidPasswordException;
 import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
 import org.mockito.Mockito;
@@ -20,8 +23,8 @@ class HashedPasswordFactoryTest {
         var givenPlainPassword = "1VeryCoolPassword!"; // NOTE: Must be a valid password due to static nature of PasswordValidator :(
         var givenHashedPassword = "givenHashedPassword";
 
-        BDDMockito.given(saltGenerator.generate()).willReturn(givenSalt);
-        BDDMockito.given(hasher.hash(anyString())).willReturn(givenHashedPassword);
+        given(saltGenerator.generate()).willReturn(givenSalt);
+        given(hasher.hash(anyString())).willReturn(givenHashedPassword);
 
         // when
         var actual = hashedPasswordFactory.create(givenPlainPassword);
@@ -32,6 +35,18 @@ class HashedPasswordFactoryTest {
 
         BDDMockito.then(saltGenerator).should().generate();
         BDDMockito.then(hasher).should().hash(givenPlainPassword + givenSalt);
+    }
+
+    @Test
+    void shouldFailToCreateInvalidPassword() {
+        // given
+        var givenInvalidPassword = ":(";
+
+        // when
+        var actual = catchException(() -> hashedPasswordFactory.create(givenInvalidPassword));
+
+        // then
+        then(actual).isInstanceOf(InvalidPasswordException.class);
     }
 
 }
