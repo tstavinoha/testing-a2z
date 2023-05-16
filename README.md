@@ -1,6 +1,6 @@
 # Testing - A to Ź
 
-`Testing - A to Ź` is a small showcase for different types of tests, written in Java, accompanying the presentation intended for college students.
+`Testing - A to Ź` is a small project showcasing different types of tests, written in Java, accompanying the presentation intended for college students.
 
 Please note:
 
@@ -13,7 +13,7 @@ Please note:
 The project models a small backend service called `Identity Service` that is able to register users and verify their passwords.
 It is not meant to be exposed to the outside world directly, but rather to be used by the public-facing services of a hypothetical platform. 
 
-![](docs/00%20-%20C1%20-%20Architecture.svg)
+![](docs/00-C1-Architecture.svg)
 
 The general architecture of the project follows the design philosophy of Clean Architecture (or at least, tries to).
 The project is split up into four modules:
@@ -24,7 +24,7 @@ The project is split up into four modules:
 
 Each module contains the source files in directory `src/main/java` and tests in directory `src/test/java`.
 
-![](docs/00%20-%20C3%20-%20Architecture.svg)
+![](docs/00-C3-Architecture.svg)
 
 Testing technologies used in the project are:
 - [JUnit 5 (Jupiter)](https://junit.org/junit5/) - base testing framework that provides the support for running tests
@@ -72,7 +72,7 @@ Using IDEA:
 `UserTest` is the first, and therefore the simplest test of the bunch. 
 The `User` class has no smart logic, it just delegates password verification to the dedicated object.
 
-![](docs/01%20-%20UserTest.svg)
+![](docs/01-UserTest.svg)
 
 There are two tests:
 - `shouldInstantiateUser`
@@ -84,7 +84,7 @@ There are two tests:
 
 `PasswordCharacterTypeTest` shows how tests with same pre- and post-conditions can share code by utilizing parametrization.
 
-![](docs/02%20-%20PasswordCharacterTypeTest.svg)
+![](docs/02-PasswordCharacterTypeTest.svg)
 
 This way we can reduce the clutter, but we should use it sparingly.
 The test will attempt to determine the character type (in the context of password symbols) for a selection of characters.
@@ -93,7 +93,7 @@ The test will attempt to determine the character type (in the context of passwor
 
 `PasswordValidatorTest` displays how to assert on a piece of code that throws exceptions.
 
-![](docs/03%20-%20PasswordValidatorTest.svg)
+![](docs/03-PasswordValidatorTest.svg)
 
 `PasswordValidator` class performs a validation of a plain-text password. The password needs to satisfy some rules, otherwise an exception is thrown.
 Tests in the class `PasswordValidatorTest` attempt to validate different passwords, and in case of failure, make sure that the exception containing the correct reason was thrown.
@@ -104,7 +104,7 @@ Tests in the class `PasswordValidatorTest` attempt to validate different passwor
 
 > A pure function is a function that, given the same input, will always return the same output and does not have any observable side effect.
 
-![](docs/04%20-%20HashedPasswordTest.svg)
+![](docs/04-HashedPasswordTest.svg)
 
 - `shouldCreateHashedPassword`
   - We do not always need to mock, we can instead create test implementations
@@ -119,7 +119,7 @@ Tests in the class `PasswordValidatorTest` attempt to validate different passwor
 
 `HashedPasswordFactoryTest` presents how to prepare the subject of the test for testing.
 
-![](docs/05%20-%20HashedPasswordFactoryTest.svg)
+![](docs/05-HashedPasswordFactoryTest.svg)
 
 Up until this test, we only created mocks and mocked behavior within the methods annotated with `@Test`.
 However, usually we set up the target class and the mocks it depends on prior to the test. This test class shows how it can be done
@@ -151,7 +151,7 @@ Moving on to the integration layer, first test to take a look at is `UserControl
 Spring Framework provides a testing library called `MockMvc`, which can be used to unit test Spring MVC `@Controllers`. We test only the HTTP part,
 mocking all the dependencies that the controller uses.
 
-![](docs/07%20-%20UserControllerTest.svg)
+![](docs/07-UserControllerTest.svg)
 
 The setup is similar to using Mockito annotations, however Spring provides its own annotations which enable us to set up the `test context` in an even
 simpler manner. The following annotations are used
@@ -171,7 +171,7 @@ MockMVC has its own DSL (domain-specific language), which is not in the BDD styl
 `UserJpaRepositoryTest` is the first integration test in this project, meaning that it uses a real database.
 Class `IntegrationTestBase` defines the shared test context for all integration and functional tests.
 
-![](docs/08%20-%20JpaRepositoryTest.svg)
+![](docs/08-JpaRepositoryTest.svg)
 
 The database setup in this showcase project is as simple as possible. Alongside the test context, a small in-memory database will be started.
 This is all done implicitly by Spring Data. In case we wanted to use a "real" database, we would use dockerized database via so-called Test Containers.
@@ -202,7 +202,7 @@ All the classes in the diagram below will work in unison to handle request recei
 The functional test will, like every unit test, verify that the expected response was received - the difference is in 
 the number of engaged software components that are tested at the time.
 
-![](docs/09%20-%20UserRegistrationFunctionalTest.svg)
+![](docs/09-UserRegistrationFunctionalTest.svg)
 
 We can use mocks in functional tests as well, but we should strive to use as few as possible.
 One other alternative is the `@SpyBean`, which is half-way between a mock and a Spring bean, allowing us to either mock
@@ -232,9 +232,9 @@ of preparing the HTTP request and parsing the HTTP response, which can both go w
 
 One common library for mocking HTTP servers is MockServer. With Spring, we would most likely use different profiles to configure production and test context differently:
 - Production profile would set the external system base URL to the actual service URL, eg. `http://facebook.com`
-![](docs/09%20-%20ProductionServer.svg)
+![](docs/09-ProductionServer.svg)
 - Test profile would start the HTTP service mocking library locally and set the base URL to `http://localhost:<port>`
-![](docs/09%20-%20MockServer.svg)
+![](docs/09-MockServer.svg)
 
 ### 10. Stress test
 Stress test simulates high loads using a highly expressive DSL (domain-specific language).
