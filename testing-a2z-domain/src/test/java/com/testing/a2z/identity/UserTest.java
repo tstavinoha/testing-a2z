@@ -29,6 +29,10 @@ class UserTest {
         then(result.id()).isEqualTo(id);
         then(result.username()).isEqualTo(username);
         then(result.password()).isEqualTo(password);
+
+        // NOTE - all of the above can be replaced with the following
+        var expected = new User(id, username, password);
+        then(result).usingRecursiveComparison().isEqualTo(expected);
     }
 
     @Test
