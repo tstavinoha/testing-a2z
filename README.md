@@ -10,7 +10,12 @@ Please note:
 
 <!-- TOC -->
 * [Identity service use-case](#identity-service-use-case)
+    * [System Context diagram](#system-context-diagram)
+    * [Container digram](#container-digram)
+    * [Component digram](#component-digram)
+    * [Project structure](#project-structure)
 * [Running the project tests](#running-the-project-tests)
+    * [Pre-requisites](#pre-requisites)
     * [Running JUnit tests (unit, integration, end-to-end)](#running-junit-tests-unit-integration-end-to-end)
     * [Running the stress test](#running-the-stress-test)
 * [Test showcases](#test-showcases)
@@ -23,8 +28,11 @@ Please note:
     * [7. Unit testing the integration layer](#7-unit-testing-the-integration-layer)
     * [8. Integration test with a "real" DB](#8-integration-test-with-a-real-db)
     * [9. Functional test](#9-functional-test)
+      * [Entry end of the E2E](#entry-end-of-the-e2e)
+      * [Exit end of the E2E](#exit-end-of-the-e2e)
     * [10. Stress test](#10-stress-test)
 * [Limitations and shortcuts](#limitations-and-shortcuts)
+* [Useful links](#useful-links)
 <!-- TOC -->
 
 Identity service use-case
@@ -33,7 +41,25 @@ Identity service use-case
 The project models a small backend service called `Identity Service` that is able to register users and verify their passwords.
 It is not meant to be exposed to the outside world directly, but rather to be used by the public-facing services of a hypothetical platform. 
 
+### System Context diagram
+
+Context diagram is a high-level overview of the system and its environment.
+
 ![](docs/00-C1-Architecture.svg)
+
+### Container digram
+
+Container diagram describes the different applications that make up the ecosystem in which our service lives.
+
+![](docs/00-C2-Containers.svg)
+
+### Component digram
+
+The Component diagram shows how a container is made up of a number of _components_, what each of those components are, their responsibilities and the technology/implementation details.
+
+![](docs/00-C3-Architecture.svg)
+
+### Project structure
 
 The general architecture of the project follows the design philosophy of Clean Architecture (or at least, tries to).
 The project is split up into four modules:
@@ -44,7 +70,7 @@ The project is split up into four modules:
 
 Each module contains the source files in directory `src/main/java` and tests in directory `src/test/java`.
 
-![](docs/00-C3-Architecture.svg)
+
 
 Testing technologies used in the project are:
 - [JUnit 5 (Jupiter)](https://junit.org/junit5/) - base testing framework that provides the support for running tests
@@ -275,4 +301,7 @@ Limitations and shortcuts
 - DB is in-memory, for simplicity of usage
 - Bean Validation on domain models and HTTP entities was skipped
 
+Useful links
+============
 
+- [C4 model](https://c4model.com) - The C4 model is an easy to learn, developer friendly approach to software architecture diagramming 

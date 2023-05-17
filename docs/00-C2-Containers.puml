@@ -1,0 +1,25 @@
+@startuml
+!include <C4/C4_Container.puml>
+
+left to right direction
+
+Person(user, "User", "A person that can be identified and logged in")
+
+Container_Ext(spaContainer, "Single-Page Application", "React", "Provides our platform's functionality to users via web.")
+Container_Ext(mobileAppContainer, "Mobile App", "Ionic", "Provides our platform's functionality to users via a mobile app.")
+Container_Ext(frontendServerContainer, "Frontend Server", "Java Spring MVC", "Enables client apps to use our platform.")
+
+Rel(user, spaContainer, "Uses via browser", "HTTPS")
+Rel(user, mobileAppContainer, "Uses via mobile phone", "HTTPS")
+
+Rel(spaContainer, frontendServerContainer, "Uses", "HTTPS")
+Rel(mobileAppContainer, frontendServerContainer, "Uses", "HTTPS")
+
+Container(identityService, "Identity Service", "Java Spring MVC", "Stores information about users and their authentication options.\n\nProvides functionality for registering new users and verifying passwords of existing users.")
+ContainerDb(database, "Database", "H2", "In-memory storage")
+
+Rel(identityService, database, "Persists using")
+
+Rel(frontendServerContainer, identityService, "Verifies users using", "HTTPS")
+
+@enduml
