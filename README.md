@@ -8,7 +8,27 @@ Please note:
 > Some design decisions are purposely simplified and the architecture uses some shortcuts which would not be acceptable in a real-world project.
 > Basically, the project is set up in a way that allows for progressive introduction of testing concepts.
 
-## About
+<!-- TOC -->
+* [Identity service use-case](#identity-service-use-case)
+* [Running the project tests](#running-the-project-tests)
+    * [Running JUnit tests (unit, integration, end-to-end)](#running-junit-tests-unit-integration-end-to-end)
+    * [Running the stress test](#running-the-stress-test)
+* [Test showcases](#test-showcases)
+    * [1. Basic asserting and mocking](#1-basic-asserting-and-mocking)
+    * [2. Parameterized tests](#2-parameterized-tests)
+    * [3. Testing exceptions](#3-testing-exceptions)
+    * [4. Statics in tests](#4-statics-in-tests)
+    * [5. Setting up test configuration](#5-setting-up-test-configuration)
+    * [6. Reusing test configuration](#6-reusing-test-configuration)
+    * [7. Unit testing the integration layer](#7-unit-testing-the-integration-layer)
+    * [8. Integration test with a "real" DB](#8-integration-test-with-a-real-db)
+    * [9. Functional test](#9-functional-test)
+    * [10. Stress test](#10-stress-test)
+* [Limitations and shortcuts](#limitations-and-shortcuts)
+<!-- TOC -->
+
+Identity service use-case
+==========================
 
 The project models a small backend service called `Identity Service` that is able to register users and verify their passwords.
 It is not meant to be exposed to the outside world directly, but rather to be used by the public-facing services of a hypothetical platform. 
@@ -46,7 +66,8 @@ Special magic behind the curtains of Spring includes:
   - Perfect for showcase projects, but do not use in production :)
 - Configuration file can be found in `src/main/resources/application.yml`
 
-## Running the project tests
+Running the project tests
+=========================
 
 ### Pre-requisites
 - Java 20
@@ -59,17 +80,19 @@ Using maven:
 
 Using IDEA:
 - Open the test file (or find the test directory in the project viewer)
-- Right-click the desired test and press run
+- Click the run icon on the test method line
+- Alternatively, right-click the desired test and press run
 
 ### Running the stress test
 - Start the application (main method in `com.testing.a2z.Application`)
 - Start the stress test from `testing-a2z-stress-test` directory (`mvn clean gatling:test -f pom.xml`)
 
-## Test showcases
+Test showcases
+==============
 
-### 1. UserTest
+### 1. Basic asserting and mocking
 
-`UserTest` is the first, and therefore the simplest test of the bunch. 
+`UserTest` is the first test examined, and is therefore the simplest test of the bunch. 
 The `User` class has no smart logic, it just delegates password verification to the dedicated object.
 
 ![](docs/01-UserTest.svg)
@@ -80,7 +103,7 @@ There are two tests:
 - `shouldVerifyPassword`
   - showcases how to add behavior to mocks and check their invocations 
 
-### 2. PasswordCharacterTypeTest
+### 2. Parameterized tests
 
 `PasswordCharacterTypeTest` shows how tests with same pre- and post-conditions can share code by utilizing parametrization.
 
@@ -89,7 +112,7 @@ There are two tests:
 This way we can reduce the clutter, but we should use it sparingly.
 The test will attempt to determine the character type (in the context of password symbols) for a selection of characters.
 
-### 3. PasswordValidatorTest
+### 3. Testing exceptions
 
 `PasswordValidatorTest` displays how to assert on a piece of code that throws exceptions.
 
@@ -98,7 +121,7 @@ The test will attempt to determine the character type (in the context of passwor
 `PasswordValidator` class performs a validation of a plain-text password. The password needs to satisfy some rules, otherwise an exception is thrown.
 Tests in the class `PasswordValidatorTest` attempt to validate different passwords, and in case of failure, make sure that the exception containing the correct reason was thrown.
 
-### 4. HashedPasswordTest
+### 4. Statics in tests
 
 `HashedPasswordTest` points out one possibility ("test implementation") and one issue ("impure static methods").
 
@@ -115,7 +138,7 @@ Tests in the class `PasswordValidatorTest` attempt to validate different passwor
   - Tests a pure method, there are no problems testing it.
   - The only drawback is that we can not completely change the output as we can with non-static members.
 
-### 5. HashedPasswordFactoryTest
+### 5. Setting up test configuration
 
 `HashedPasswordFactoryTest` presents how to prepare the subject of the test for testing.
 
@@ -132,10 +155,10 @@ valid. What is considered a valid password may change in the future, and this te
 validation. From the perspective of the `HashedPasswordFactory`, the only important thing is whether the `PasswordValidator` deemed the password valid or not.
 It would be better if we could just mock the desired behavior of the validator. Also, we can't verify that the static member was actually called.
 
-### 6. ApplicationLayerTestBase and RegisterUserUseCaseTest
+### 6. Reusing test configuration
 
-These two tests show how we can configure tests in a manner that can be reused. Configuration can be shared through inheritance - `RegisterUserUseCaseTest` extends `ApplicationLayerTestBase` and
-implicitly inherits all the configuration.
+The tests `ApplicationLayerTestBase` and `RegisterUserUseCaseTest` show how we can configure tests in a manner that can be reused. 
+Configuration can be shared through inheritance - `RegisterUserUseCaseTest` extends `ApplicationLayerTestBase` and implicitly inherits all the configuration.
 
 ![](docs/06-ConfigurationInheritance.svg)
 
@@ -149,7 +172,7 @@ The hook in this test class is used just to reassign the variable to a more appr
 
 Also, this test is written more in BDD style compared to previous ones, where BDD conventions were intentionally used more loosely.
 
-### 7. UserControllerTest
+### 7. Unit testing the integration layer
 
 Moving on to the integration layer, first test to take a look at is `UserControllerTest`, which sits somewhere between a unit and an integration test.
 Spring Framework provides a testing library called `MockMvc`, which can be used to unit test Spring MVC `@Controllers`. We test only the HTTP part,
@@ -170,7 +193,7 @@ simpler manner. The following annotations are used
 
 MockMVC has its own DSL (domain-specific language), which is not in the BDD style, so the tests themselves are not written in the BDD style as well.
 
-### 8. UserJpaRepositoryTest
+### 8. Integration test with a "real" DB
 
 `UserJpaRepositoryTest` is the first integration test in this project, meaning that it uses a real database.
 Class `IntegrationTestBase` defines the shared test context for all integration and functional tests.
@@ -199,7 +222,7 @@ public void cleanUp() {
 
 The database cleanup shown above is important in order for our tests to be isolated.
 
-### 9. UserRegistrationFunctionalTest
+### 9. Functional test
 
 Functional tests (a.k.a. End-To-End, E2E) test the system from "outside", by simulating interactions that the system would encounter in production. 
 All the classes in the diagram below will work in unison to handle request received via HTTP.
@@ -245,7 +268,10 @@ Stress test simulates high loads using a highly expressive DSL (domain-specific 
 
 The Gatling test called `StressTest` will first register a user, and the initiate a bombardment of our service with 750 requests per second for 30 seconds.
 
-## Limitations and shortcuts
+
+Limitations and shortcuts
+=========================
+
 - DB is in-memory, for simplicity of usage
 - Bean Validation on domain models and HTTP entities was skipped
 

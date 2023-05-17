@@ -17,7 +17,7 @@ class HashedPasswordFactoryTest {
     HashedPasswordFactory hashedPasswordFactory = new HashedPasswordFactory(saltGenerator, hasher);
 
     @Test
-    void shouldCreateHashedPassword() {
+    void shouldCreateFromPlainPassword() {
         // given
         var givenSalt = "givenSalt";
         var givenPlainPassword = "1VeryCoolPassword!"; // NOTE: Must be a valid password due to static nature of PasswordValidator :(
@@ -38,7 +38,7 @@ class HashedPasswordFactoryTest {
     }
 
     @Test
-    void shouldFailToCreateInvalidPassword() {
+    void shouldFailToCreateFromInvalidPlainPassword() {
         // given
         var givenInvalidPassword = ":(";
 
@@ -47,6 +47,20 @@ class HashedPasswordFactoryTest {
 
         // then
         then(actual).isInstanceOf(InvalidPasswordException.class);
+    }
+
+    @Test
+    void shouldCreateAlreadyHashedPassword() {
+        // given
+        var givenSalt = "givenSalt";
+        var givenHashedPassword = "givenHashedPassword";
+
+        // when
+        var actual = hashedPasswordFactory.create(givenSalt, givenHashedPassword);
+
+        // then
+        var expected = new HashedPassword(givenSalt, givenHashedPassword, hasher);
+        then(actual).isEqualTo(expected);
     }
 
 }
